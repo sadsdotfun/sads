@@ -80,7 +80,7 @@
   color: #575757;
 }
 .pre code:nth-child(2) {
-  color: #e34ba9;
+  color: #b374ff;
 }
 .cmd {
   height: 19px;
@@ -105,7 +105,7 @@
   height: 100%;
   overflow: hidden;
   background-color: transparent;
-  border-right: 0.15em solid #e34ba9;
+  border-right: 0.15em solid #b374ff;
   animation: cursor 0.5s step-end infinite alternate, blinking 0.5s infinite;
 }
 
