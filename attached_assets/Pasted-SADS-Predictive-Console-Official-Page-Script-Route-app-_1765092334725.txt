@@ -1,0 +1,236 @@
+SADS Predictive Console — Official Page Script
+(Route: /app)
+
+Quantum Pattern Replication UI
+
+🛰 Page Purpose
+
+The Predictive Console is where users enter a wallet or token address and initiate a live, animated quantum forecast showing:
+
+Risk Event Windows — predicted future exploit times
+
+Quantum Similarity Score — match to historical malicious behavior
+
+Temporal Fragility Index (TFI) — likelihood of collapse
+
+Anomaly Clusters — behaviors that break chain symmetry
+
+Liquidity Manipulation Probability
+
+This page transforms complex on-chain data into a breathing, orbital visualization.
+
+🎨 Visual Layout
+
+👇 Visual structure (z-index):
+
+Layer 0: 3D animated purple nebula background
+Layer 1: Central Orb Simulation Canvas (WebGL)
+Layer 2: Side Data Panels + Output Chips
+Layer 3: Input Command Bar + Action Buttons
+Layer 4: Navigation (existing footer nav)
+
+🧩 Core Interactive Components
+1️⃣ Command Bar
+
+Position: top-center overlay
+Sleek, purple neon underglow
+
+[ Enter wallet or token address here... ]   [ Run Prediction Scan ]
+
+
+When typing:
+
+Purple signal lines pulse outwards toward the orb
+
+When scanning:
+
+Button flips to “Analyzing Quantum Signatures…”
+
+Orb splits into fragments → re-merging into future projections
+
+2️⃣ The Orb
+
+The star of the page — fully interactive 3D sphere of prediction
+
+Behavior:
+
+Idle: slow rotation + glowing pulse
+
+Scan start: breaks into swirling particle swarm
+
+Scan complete: two states appear side-by-side
+
+Chain Reality (Present)
+
+Predicted Quantum Future
+
+Interaction:
+
+Hover → internal neuron-like structures light up
+
+Drag → rotate future projection timeline
+
+Scroll → time dilation (see risk at different future windows)
+
+You can scrub the future.
+
+3️⃣ Orbital Data Chips
+
+Orbiting UI elements that react to prediction output:
+
+Chip Name	Value Example
+Temporal Fragility Index	82% — High Collapse Likelihood
+Quantum Similarity Score	77% match with past rug clusters
+Liquidity Safety Score	12% (Critical)
+Holder Symmetry	Imbalanced — Whale Dominance
+
+Chips glow brighter when value worsens.
+
+4️⃣ Timeline Ring
+
+Circular scrub interface around the orb:
+
+Segments:
+
+6h
+
+24h
+
+48h
+
+72h
+
+7d
+
+Each provides:
+
+Risk spike indicators (purple peaks)
+
+“Event windows” (click → expansion panel)
+
+🔬 Event Window Panel (Slide Up on Click)
+
+Example:
+
+HIGH PROBABILITY EVENT DETECTED
+21 hours from now
+
+Bot funding activity increases
+
+Dev wallet movement detected
+
+Liquidity pool imbalance forming
+
+Actions:
+
+[ Add to Watchlist ]
+
+[ Send Alert Notification ]
+
+[ View Similar Historical Events ] → opens side panel
+
+🧠 Sidebar Panel — Quantum Similarity Explorer
+
+Slide-in from right
+Searches cluster of similar past behaviors
+→ visual chain of references with outcomes:
+
+Behavior Match	Past Outcome
+92% similarity	Rug within 36h
+75% similarity	Pump & dump
+48% similarity	Liquidity migration only
+
+User learns:
+
+“This has happened before — and here’s how it played out.”
+
+🔄 Live Updating Mode
+
+If user enables toggle:
+
+Continuous Scanning Mode
+
+The orb pulses every 30s:
+
+Risk updates in real-time
+
+Timeline shifts as predictions adjust
+
+Event windows appear/disappear
+
+Rogue surge:
+
+Screen flashes purple static for 0.2 seconds (danger alert)
+
+🗂 Technology Behind It
+Backend Prediction (Mock API initially)
+
+Endpoint:
+
+POST /api/predict
+{
+  "address": "string"
+}
+
+
+Returns:
+
+{
+  "TFI": 0.82,
+  "QSS": 0.77,
+  "riskWindows": [
+    { "timeHours": 21, "confidence": 0.94 }
+  ],
+  "anomalyCount": 5,
+  "liquiditySafety": 0.12,
+  "similarPastCases": [
+    { "confidence": 0.92, "outcome": "rug" }
+  ]
+}
+
+Frontend Visual Engine
+
+Three.js + GLSL shaders
+
+Particle physics orbit simulation
+
+Timeline ring (SVG + GSAP animation)
+
+State interpolation for future scrubbing
+
+Performance consideration:
+
+Lower-density orb on mobile
+
+Disabled timeline ring scrub under 800px width
+
+🛡 Alerts System (Phase 2)
+
+Uses wallet auth + cloud notifications
+
+Users can:
+
+Follow tokens
+
+Receive push alerts when new anomalous behavior expires prediction horizon
+
+Subscription-based monetization.
+
+✨ Microinteractions (Finishing Touches)
+Action	Effect
+Press Enter	Orb bursts → fractures → reform as prediction
+Hover chip	Radiant shockwave through orb
+High risk spike	Purple lightning arcs across background
+Scroll in orbit	Futuristic time stretching sound
+Idle 10s	Camera slowly drifts outward → more stars
+
+This console must feel alive.
+
+📌 Final Deliverables from this script
+
+✔ UI layout
+✔ All interaction rules
+✔ Data structure + API format
+✔ Motion design + animations
+✔ Desktop + mobile experience plan
+✔ Cosmic brand theme locked in
