@@ -737,7 +737,7 @@ export default function Nexus() {
           </div>
         </div>
         <div className="center-logo">
-          <h1 id="logo-text">Nexus.</h1>
+          <h1 id="logo-text">Sads</h1>
         </div>
       </div>
 
