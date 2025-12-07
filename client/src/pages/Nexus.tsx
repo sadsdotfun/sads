@@ -1,23 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Pane } from "tweakpane";
 
 export default function Nexus() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const uiContainerRef = useRef<HTMLDivElement>(null);
   const storyTextRef = useRef<HTMLHeadingElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const paneRef = useRef<any>(null); // Changed to any to avoid TS issues with Tweakpane v4 types
   const requestRef = useRef<number | null>(null);
 
   useEffect(() => {
     let scene: THREE.Scene, camera: THREE.OrthographicCamera, renderer: THREE.WebGLRenderer, material: THREE.ShaderMaterial;
     let clock: THREE.Clock;
-    let mouse = { x: 0, y: 0 };
+    let mousePosition = new THREE.Vector2(0.5, 0.5);
+    let targetMousePosition = new THREE.Vector2(0.5, 0.5);
     let cursorSphere3D = new THREE.Vector3(0, 0, 0);
     let activeMerges = 0;
-    let targetMousePosition = new THREE.Vector2(0.5, 0.5);
-    let mousePosition = new THREE.Vector2(0.5, 0.5);
     let lastTime = performance.now();
     let frameCount = 0;
     let fps = 0;
@@ -33,210 +29,27 @@ export default function Nexus() {
       isMobile ? 1.5 : 2
     );
 
-    const presets: Record<string, any> = {
-      moody: {
-        sphereCount: isMobile ? 4 : 6,
-        ambientIntensity: 0.02,
-        diffuseIntensity: 0.6,
-        specularIntensity: 1.8,
-        specularPower: 8,
-        fresnelPower: 1.2,
-        backgroundColor: new THREE.Color(0x050505),
-        sphereColor: new THREE.Color(0x000000),
-        lightColor: new THREE.Color(0xffffff),
-        lightPosition: new THREE.Vector3(1, 1, 1),
-        smoothness: 0.3,
-        contrast: 2.0,
-        fogDensity: 0.12,
-        cursorGlowIntensity: 0.4,
-        cursorGlowRadius: 1.2,
-        cursorGlowColor: new THREE.Color(0xffffff)
-      },
-      cosmic: {
-        sphereCount: isMobile ? 5 : 8,
-        ambientIntensity: 0.03,
-        diffuseIntensity: 0.8,
-        specularIntensity: 1.6,
-        specularPower: 6,
-        fresnelPower: 1.4,
-        backgroundColor: new THREE.Color(0x000011),
-        sphereColor: new THREE.Color(0x000022),
-        lightColor: new THREE.Color(0x88aaff),
-        lightPosition: new THREE.Vector3(0.5, 1, 0.5),
-        smoothness: 0.4,
-        contrast: 2.0,
-        fogDensity: 0.15,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.5,
-        cursorGlowColor: new THREE.Color(0x4477ff)
-      },
-      minimal: {
-        sphereCount: isMobile ? 2 : 3,
-        ambientIntensity: 0.0,
-        diffuseIntensity: 0.25,
-        specularIntensity: 1.3,
-        specularPower: 11,
-        fresnelPower: 1.7,
-        backgroundColor: new THREE.Color(0x0a0a0a),
-        sphereColor: new THREE.Color(0x000000),
-        lightColor: new THREE.Color(0xffffff),
-        lightPosition: new THREE.Vector3(1, 0.5, 0.8),
-        smoothness: 0.25,
-        contrast: 2.0,
-        fogDensity: 0.1,
-        cursorGlowIntensity: 0.3,
-        cursorGlowRadius: 1.0,
-        cursorGlowColor: new THREE.Color(0xffffff)
-      },
-      vibrant: {
-        sphereCount: isMobile ? 6 : 10,
-        ambientIntensity: 0.05,
-        diffuseIntensity: 0.9,
-        specularIntensity: 1.5,
-        specularPower: 5,
-        fresnelPower: 1.3,
-        backgroundColor: new THREE.Color(0x0a0505),
-        sphereColor: new THREE.Color(0x110000),
-        lightColor: new THREE.Color(0xff8866),
-        lightPosition: new THREE.Vector3(0.8, 1.2, 0.6),
-        smoothness: 0.5,
-        contrast: 2.0,
-        fogDensity: 0.08,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.3,
-        cursorGlowColor: new THREE.Color(0xff6644)
-      },
-      neon: {
-        sphereCount: isMobile ? 4 : 7,
-        ambientIntensity: 0.04,
-        diffuseIntensity: 1.0,
-        specularIntensity: 2.0,
-        specularPower: 4,
-        fresnelPower: 1.0,
-        backgroundColor: new THREE.Color(0x000505),
-        sphereColor: new THREE.Color(0x000808),
-        lightColor: new THREE.Color(0x00ffcc),
-        lightPosition: new THREE.Vector3(0.7, 1.3, 0.8),
-        smoothness: 0.7,
-        contrast: 2.0,
-        fogDensity: 0.08,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.4,
-        cursorGlowColor: new THREE.Color(0x00ffaa)
-      },
-      sunset: {
-        sphereCount: isMobile ? 3 : 5,
-        ambientIntensity: 0.04,
-        diffuseIntensity: 0.7,
-        specularIntensity: 1.4,
-        specularPower: 7,
-        fresnelPower: 1.5,
-        backgroundColor: new THREE.Color(0x150505),
-        sphereColor: new THREE.Color(0x100000),
-        lightColor: new THREE.Color(0xff6622),
-        lightPosition: new THREE.Vector3(1.2, 0.4, 0.6),
-        smoothness: 0.35,
-        contrast: 2.0,
-        fogDensity: 0.1,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.4,
-        cursorGlowColor: new THREE.Color(0xff4422)
-      },
-      midnight: {
-        sphereCount: isMobile ? 3 : 4,
-        ambientIntensity: 0.01,
-        diffuseIntensity: 0.4,
-        specularIntensity: 1.6,
-        specularPower: 9,
-        fresnelPower: 1.8,
-        backgroundColor: new THREE.Color(0x000010),
-        sphereColor: new THREE.Color(0x000015),
-        lightColor: new THREE.Color(0x4466ff),
-        lightPosition: new THREE.Vector3(0.9, 0.8, 1.0),
-        smoothness: 0.28,
-        contrast: 2.0,
-        fogDensity: 0.14,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.6,
-        cursorGlowColor: new THREE.Color(0x3355ff)
-      },
-      toxic: {
-        sphereCount: isMobile ? 5 : 9,
-        ambientIntensity: 0.06,
-        diffuseIntensity: 0.85,
-        specularIntensity: 1.7,
-        specularPower: 6,
-        fresnelPower: 1.1,
-        backgroundColor: new THREE.Color(0x001000),
-        sphereColor: new THREE.Color(0x001500),
-        lightColor: new THREE.Color(0x66ff44),
-        lightPosition: new THREE.Vector3(0.6, 1.1, 0.7),
-        smoothness: 0.55,
-        contrast: 2.0,
-        fogDensity: 0.09,
-        cursorGlowIntensity: 0.8,
-        cursorGlowRadius: 1.7,
-        cursorGlowColor: new THREE.Color(0x44ff22)
-      },
-      pastel: {
-        sphereCount: isMobile ? 4 : 6,
-        ambientIntensity: 0.08,
-        diffuseIntensity: 0.5,
-        specularIntensity: 1.2,
-        specularPower: 12,
-        fresnelPower: 2.0,
-        backgroundColor: new THREE.Color(0x101018),
-        sphereColor: new THREE.Color(0x080814),
-        lightColor: new THREE.Color(0xaabbff),
-        lightPosition: new THREE.Vector3(1.0, 0.7, 0.9),
-        smoothness: 0.38,
-        contrast: 1.8,
-        fogDensity: 0.07,
-        cursorGlowIntensity: 0.35,
-        cursorGlowRadius: 1.1,
-        cursorGlowColor: new THREE.Color(0x8899ff)
-      },
-      dithered: {
-        sphereCount: isMobile ? 5 : 8,
-        ambientIntensity: 0.1,
-        diffuseIntensity: 0.8,
-        specularIntensity: 1.5,
-        specularPower: 6,
-        fresnelPower: 1.2,
-        backgroundColor: new THREE.Color(0x0a0520),
-        sphereColor: new THREE.Color(0x000000),
-        lightColor: new THREE.Color(0xff00ff),
-        lightPosition: new THREE.Vector3(0.8, 0.8, 0.8),
-        smoothness: 0.6,
-        contrast: 1.8,
-        fogDensity: 0.05,
-        cursorGlowIntensity: 1.0,
-        cursorGlowRadius: 2.0,
-        cursorGlowColor: new THREE.Color(0x00ffff)
-      },
-      holographic: {
-        sphereCount: isMobile ? 4 : 6,
-        ambientIntensity: 0.12,
-        diffuseIntensity: 1.2,
-        specularIntensity: 2.5,
-        specularPower: 3,
-        fresnelPower: 0.8,
-        backgroundColor: new THREE.Color(0x0a0a15),
-        sphereColor: new THREE.Color(0x050510),
-        lightColor: new THREE.Color(0xccaaff),
-        lightPosition: new THREE.Vector3(0.9, 0.9, 1.2),
-        smoothness: 0.8,
-        contrast: 1.6,
-        fogDensity: 0.06,
-        cursorGlowIntensity: 1.2,
-        cursorGlowRadius: 2.2,
-        cursorGlowColor: new THREE.Color(0xaa77ff)
-      }
-    };
-
+    // Default to holographic preset settings directly
     const settings: Record<string, any> = {
-      preset: "holographic",
-      ...presets.holographic,
+      // Holographic preset values
+      sphereCount: isMobile ? 4 : 6,
+      ambientIntensity: 0.12,
+      diffuseIntensity: 1.2,
+      specularIntensity: 2.5,
+      specularPower: 3,
+      fresnelPower: 0.8,
+      backgroundColor: new THREE.Color(0x0a0a15),
+      sphereColor: new THREE.Color(0x050510),
+      lightColor: new THREE.Color(0xccaaff),
+      lightPosition: new THREE.Vector3(0.9, 0.9, 1.2),
+      smoothness: 0.8,
+      contrast: 1.6,
+      fogDensity: 0.06,
+      cursorGlowIntensity: 1.2,
+      cursorGlowRadius: 2.2,
+      cursorGlowColor: new THREE.Color(0xaa77ff),
+      
+      // General settings
       fixedTopLeftRadius: 0.8,
       fixedBottomRightRadius: 0.9,
       smallTopLeftRadius: 0.3,
@@ -276,37 +89,6 @@ export default function Nexus() {
           fps || 0
         );
         storyTextRef.current.innerHTML = newText;
-      }
-    }
-
-    function applyPreset(presetName: string) {
-      const preset = presets[presetName];
-      if (!preset) return;
-
-      settings.preset = presetName;
-      Object.keys(preset).forEach((key) => {
-        if (settings.hasOwnProperty(key)) {
-          settings[key] = preset[key];
-        }
-      });
-
-      if (material) {
-        material.uniforms.uSphereCount.value = settings.sphereCount;
-        material.uniforms.uAmbientIntensity.value = settings.ambientIntensity;
-        material.uniforms.uDiffuseIntensity.value = settings.diffuseIntensity;
-        material.uniforms.uSpecularIntensity.value = settings.specularIntensity;
-        material.uniforms.uSpecularPower.value = settings.specularPower;
-        material.uniforms.uFresnelPower.value = settings.fresnelPower;
-        material.uniforms.uBackgroundColor.value = settings.backgroundColor;
-        material.uniforms.uSphereColor.value = settings.sphereColor;
-        material.uniforms.uLightColor.value = settings.lightColor;
-        material.uniforms.uLightPosition.value = settings.lightPosition;
-        material.uniforms.uSmoothness.value = settings.smoothness;
-        material.uniforms.uContrast.value = settings.contrast;
-        material.uniforms.uFogDensity.value = settings.fogDensity;
-        material.uniforms.uCursorGlowIntensity.value = settings.cursorGlowIntensity;
-        material.uniforms.uCursorGlowRadius.value = settings.cursorGlowRadius;
-        material.uniforms.uCursorGlowColor.value = settings.cursorGlowColor;
       }
     }
 
@@ -729,7 +511,6 @@ export default function Nexus() {
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
 
-      setupUI();
       setupEventListeners();
 
       onPointerMove({
@@ -856,8 +637,6 @@ export default function Nexus() {
         display: block !important;
       `;
       
-      // renderer.info is strictly typed in TS, autoReset might not exist in type defs but exists in JS
-      // Using type assertion to any to avoid TS error
       if (renderer.info) {
         (renderer.info as any).autoReset = true;
       }
@@ -903,233 +682,6 @@ export default function Nexus() {
       renderer.render(scene, camera);
     }
 
-    function setupUI() {
-      if (!uiContainerRef.current) return;
-
-      // Clean up existing pane if any
-      if (paneRef.current) {
-        paneRef.current.dispose();
-      }
-
-      const pane = new Pane({
-        container: uiContainerRef.current,
-        title: "Metaball Controls",
-        expanded: !isMobile
-      }) as any; // Cast to any for Tweakpane v4 compatibility
-      paneRef.current = pane;
-
-      pane
-        .addBinding(settings, "preset", {
-          options: {
-            Moody: "moody",
-            Cosmic: "cosmic",
-            Minimal: "minimal",
-            Vibrant: "vibrant",
-            Neon: "neon",
-            Sunset: "sunset",
-            Midnight: "midnight",
-            Toxic: "toxic",
-            Pastel: "pastel",
-            Psychedelic: "dithered",
-            Holographic: "holographic"
-          }
-        })
-        .on("change", (ev: any) => {
-          applyPreset(ev.value);
-          pane.refresh();
-        });
-
-      const metaballFolder = pane.addFolder({ title: "Metaballs" });
-
-      metaballFolder
-        .addBinding(settings, "fixedTopLeftRadius", {
-          min: 0.2,
-          max: 2.0,
-          step: 0.01,
-          label: "Top Left Size"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uFixedTopLeftRadius.value = ev.value;
-        });
-
-      metaballFolder
-        .addBinding(settings, "fixedBottomRightRadius", {
-          min: 0.2,
-          max: 2.0,
-          step: 0.01,
-          label: "Bottom Right Size"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uFixedBottomRightRadius.value = ev.value;
-        });
-
-      metaballFolder
-        .addBinding(settings, "smallTopLeftRadius", {
-          min: 0.1,
-          max: 0.8,
-          step: 0.01,
-          label: "Small Top Left"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSmallTopLeftRadius.value = ev.value;
-        });
-
-      metaballFolder
-        .addBinding(settings, "smallBottomRightRadius", {
-          min: 0.1,
-          max: 0.8,
-          step: 0.01,
-          label: "Small Bottom Right"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSmallBottomRightRadius.value = ev.value;
-        });
-
-      metaballFolder
-        .addBinding(settings, "sphereCount", {
-          min: 2,
-          max: 10,
-          step: 1,
-          label: "Moving Count"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSphereCount.value = ev.value;
-        });
-
-      metaballFolder
-        .addBinding(settings, "smoothness", {
-          min: 0.1,
-          max: 1.0,
-          step: 0.01,
-          label: "Blend Smoothness"
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSmoothness.value = ev.value;
-        });
-
-      const mouseFolder = pane.addFolder({ title: "Mouse Interaction" });
-
-      mouseFolder
-        .addBinding(settings, "mouseProximityEffect")
-        .on("change", (ev: any) => {
-          material.uniforms.uMouseProximityEffect.value = ev.value;
-        });
-      
-      mouseFolder
-        .addBinding(settings, "animationSpeed", {
-          min: 0.1,
-          max: 2.0,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uAnimationSpeed.value = ev.value;
-        });
-
-      mouseFolder
-        .addBinding(settings, "movementScale", {
-          min: 0.5,
-          max: 2.0,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uMovementScale.value = ev.value;
-        });
-
-      const lightingFolder = pane.addFolder({ title: "Lighting" });
-
-      lightingFolder
-        .addBinding(settings, "ambientIntensity", {
-          min: 0,
-          max: 0.5,
-          step: 0.01
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uAmbientIntensity.value = ev.value;
-        });
-
-      lightingFolder
-        .addBinding(settings, "diffuseIntensity", {
-          min: 0,
-          max: 1.0,
-          step: 0.01
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uDiffuseIntensity.value = ev.value;
-        });
-
-      lightingFolder
-        .addBinding(settings, "specularIntensity", {
-          min: 0,
-          max: 2.0,
-          step: 0.01
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSpecularIntensity.value = ev.value;
-        });
-
-      lightingFolder
-        .addBinding(settings, "specularPower", {
-          min: 1,
-          max: 64,
-          step: 1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uSpecularPower.value = ev.value;
-        });
-
-      lightingFolder
-        .addBinding(settings, "fresnelPower", {
-          min: 1,
-          max: 5,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uFresnelPower.value = ev.value;
-        });
-
-      lightingFolder
-        .addBinding(settings, "contrast", {
-          min: 0.5,
-          max: 2.0,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uContrast.value = ev.value;
-        });
-
-      const glowFolder = pane.addFolder({ title: "Cursor Glow" });
-
-      glowFolder
-        .addBinding(settings, "cursorGlowIntensity", {
-          min: 0,
-          max: 2.0,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uCursorGlowIntensity.value = ev.value;
-        });
-
-      glowFolder
-        .addBinding(settings, "cursorGlowRadius", {
-          min: 0.5,
-          max: 3.0,
-          step: 0.1
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uCursorGlowRadius.value = ev.value;
-        });
-
-      glowFolder
-        .addBinding(settings, "fogDensity", {
-          min: 0,
-          max: 0.5,
-          step: 0.01
-        })
-        .on("change", (ev: any) => {
-          material.uniforms.uFogDensity.value = ev.value;
-        });
-    }
-
     init();
 
     // Cleanup function
@@ -1143,10 +695,6 @@ export default function Nexus() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("resize", onWindowResize);
-      
-      if (paneRef.current) {
-        paneRef.current.dispose();
-      }
       
       if (rendererRef.current) {
         rendererRef.current.dispose();
@@ -1179,7 +727,7 @@ export default function Nexus() {
     <section className="section hero-section">
       <div id="container" ref={containerRef}></div>
       <div id="stats"></div>
-      <div id="ui-container" ref={uiContainerRef}></div>
+      {/* UI container removed as requested */}
 
       <div className="header-area">
         <div className="logo-container" id="theme-toggle">
