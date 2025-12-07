@@ -22,6 +22,7 @@ function QuantumOrb({
   riskLevel: number;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [webglFailed, setWebglFailed] = useState(false);
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -38,11 +39,19 @@ function QuantumOrb({
     const width = container.clientWidth;
     const height = container.clientHeight;
 
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch (e) {
+      console.warn('WebGL not available, using fallback');
+      setWebglFailed(true);
+      return;
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.z = 4;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -191,6 +200,18 @@ function QuantumOrb({
       cancelAnimationFrame(animationId);
     };
   }, [isScanning, hasResult, riskLevel]);
+
+  if (webglFailed) {
+    return (
+      <div className="w-full h-full absolute inset-0 flex items-center justify-center">
+        <div className="w-48 h-48 rounded-full bg-gradient-to-br from-purple-600/30 to-blue-600/30 animate-pulse flex items-center justify-center">
+          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500/40 to-blue-500/40 animate-pulse" style={{ animationDelay: '0.2s' }}>
+            <div className="w-full h-full rounded-full border-2 border-purple-500/50 animate-spin" style={{ animationDuration: '8s' }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
