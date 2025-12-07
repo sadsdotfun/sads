@@ -175,11 +175,11 @@ export default function PredictionTerminal() {
   }, [selectedAsset]);
 
   return (
-    <div className="min-h-screen bg-black text-white font-mono" data-testid="prediction-terminal">
-      <div className="flex h-screen">
+    <div className="min-h-screen bg-black text-white font-mono overflow-x-auto" data-testid="prediction-terminal">
+      <div className="flex h-screen min-w-[1024px]">
         
         {/* Left Sidebar - Watchlist */}
-        <aside className="w-72 border-r border-white/10 flex flex-col bg-black/50" data-testid="sidebar-watchlist">
+        <aside className="w-64 flex-shrink-0 border-r border-white/10 flex flex-col bg-black/50" data-testid="sidebar-watchlist">
           <div className="p-4 border-b border-white/10">
             <h2 className="text-sm font-semibold text-white/80 uppercase tracking-widest mb-4">Watchlist</h2>
             <form onSubmit={handleSearchSubmit}>
@@ -467,24 +467,24 @@ export default function PredictionTerminal() {
 
               {/* Bottom Tabs */}
               <section className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden" data-testid="analysis-tabs">
-                <div className="flex border-b border-white/10">
+                <div className="flex border-b border-white/10 overflow-x-auto">
                   {[
-                    { id: "root-cause" as TabId, label: "Root Cause Analysis", icon: "🟣" },
-                    { id: "dev-behavior" as TabId, label: "Developer Behavior", icon: "⚙️" },
-                    { id: "liquidity" as TabId, label: "Liquidity Structure", icon: "📈" },
-                    { id: "network" as TabId, label: "Network Relationships", icon: "🛰️" },
+                    { id: "root-cause" as TabId, label: "Root Cause", icon: "🟣" },
+                    { id: "dev-behavior" as TabId, label: "Dev Behavior", icon: "⚙️" },
+                    { id: "liquidity" as TabId, label: "Liquidity", icon: "📈" },
+                    { id: "network" as TabId, label: "Network", icon: "🛰️" },
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex-1 px-4 py-3 text-xs font-medium transition-all ${
+                      className={`flex-1 px-3 py-3 text-xs font-medium transition-all whitespace-nowrap ${
                         activeTab === tab.id 
                           ? 'bg-white/5 text-white border-b-2 border-purple-500' 
                           : 'text-white/50 hover:text-white/70 hover:bg-white/[0.02]'
                       }`}
                       data-testid={`tab-${tab.id}`}
                     >
-                      <span className="mr-2">{tab.icon}</span>
+                      <span className="mr-1">{tab.icon}</span>
                       {tab.label}
                     </button>
                   ))}
@@ -593,7 +593,7 @@ export default function PredictionTerminal() {
             </div>
 
             {/* Right Side Panels */}
-            <aside className="w-80 border-l border-white/10 overflow-y-auto bg-black/30" data-testid="right-panels">
+            <aside className="w-72 flex-shrink-0 border-l border-white/10 overflow-y-auto bg-black/30" data-testid="right-panels">
               
               {/* Risk Projection Chart */}
               <section className="p-4 border-b border-white/10">
