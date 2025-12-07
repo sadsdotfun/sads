@@ -711,7 +711,7 @@ export default function Nexus() {
     const originalText = e.currentTarget.textContent;
     const target = e.currentTarget;
     navigator.clipboard
-      .writeText("hi@filip.fyi")
+      .writeText("support@sads.fun")
       .then(() => {
         target.textContent = "transmission sent to clipboard";
         setTimeout(() => {
@@ -719,7 +719,7 @@ export default function Nexus() {
         }, 2000);
       })
       .catch(() => {
-        window.location.href = "mailto:hi@filip.fyi";
+        window.location.href = "mailto:support@sads.fun";
       });
   };
 
@@ -746,7 +746,7 @@ export default function Nexus() {
 
       <div className="contact-info">
         <p className="contact-heading">+Get in touch</p>
-        <span className="contact-email" onClick={handleEmailClick}>hi@filip.fyi</span>
+        <span className="contact-email" onClick={handleEmailClick}>support@sads.fun</span>
       </div>
 
       <div className="footer-links">
