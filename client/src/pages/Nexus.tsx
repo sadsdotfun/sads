@@ -730,12 +730,6 @@ export default function Nexus() {
       {/* UI container removed as requested */}
 
       <div className="header-area">
-        <div className="logo-container" id="theme-toggle">
-          <div className="logo-circles">
-            <div className="circle circle-1"></div>
-            <div className="circle circle-2"></div>
-          </div>
-        </div>
         <div className="center-logo">
           <h1 id="logo-text">Sads</h1>
         </div>
