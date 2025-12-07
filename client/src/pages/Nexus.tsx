@@ -736,7 +736,7 @@ export default function Nexus() {
       </div>
 
       <div className="hero">
-        <h1>Where matter becomes<br />thought and thought<br />becomes form</h1>
+        <h1>Solana Autonomous<br />Discovery System</h1>
         <h2 id="story-text" ref={storyTextRef}>
           our vessel drifts at coordinates (0.00, 0.00)<br />
           gravitational field extends 0.10 units into quantum foam<br />
