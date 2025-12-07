@@ -752,11 +752,11 @@ export default function Nexus() {
       </div>
 
       <div className="footer-links">
-        <Link href="/app" className="footer-link">🔮 Predictive Console</Link>
-        <Link href="/orbiverse" className="footer-link">🌐 Orbiverse</Link>
-        <Link href="/docs" className="footer-link">📚 Docs</Link>
-        <Link href="/roadmap" className="footer-link">🚀 Roadmap</Link>
-        <Link href="/contact" className="footer-link">✉️ Contact</Link>
+        <Link href="/app" className="footer-link">Predictive Console</Link>
+        <Link href="/orbiverse" className="footer-link">Orbiverse</Link>
+        <Link href="/docs" className="footer-link">Docs</Link>
+        <Link href="/roadmap" className="footer-link">Roadmap</Link>
+        <Link href="/contact" className="footer-link">Contact</Link>
       </div>
 
       <div className="coordinates">
