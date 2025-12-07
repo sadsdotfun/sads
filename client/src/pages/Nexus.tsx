@@ -756,12 +756,13 @@ export default function Nexus() {
 
       <div className="header-area">
         <div className="center-logo">
-          <h1 id="logo-text">SADS</h1>
+          <img src="/attached_assets/maon-removebg-preview_1765128946646.png" alt="SADS Logo" style={{ width: '80px', height: 'auto' }} />
           <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', letterSpacing: '0.1em', opacity: 0.8, color: 'var(--text-secondary)' }}>Prediction is protection.</p>
         </div>
       </div>
 
       <div className="hero">
+        <h1 id="logo-text" style={{ marginBottom: '0.5rem' }}>SADS</h1>
         <h1>Solana Autonomous<br />Prediction System</h1>
         <h2 id="story-text" ref={storyTextRef}>
           our vessel drifts at coordinates (0.00, 0.00)<br />
