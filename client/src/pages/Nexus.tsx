@@ -748,6 +748,7 @@ export default function Nexus() {
           gravitational field extends 0.10 units into quantum foam<br />
           currently merging with 0 other entities
         </h2>
+        <button className="glow-button" data-testid="button-enter">Enter</button>
       </div>
 
       <div className="contact-info">
