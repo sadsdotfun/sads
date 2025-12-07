@@ -231,7 +231,7 @@ export default function PredictionTerminal() {
       
       <div className="pending-content">
         <div className="pending-wrapper">
-          <img src="/logo.png" alt="SADS Logo" style={{ width: '50px', height: 'auto', marginBottom: '2rem' }} />
+          <img src="/logo.png" alt="SADS Logo" style={{ width: '50px', height: 'auto', marginBottom: '0.5rem' }} />
           <div className="card">
             <div className="wrap">
               <div className="terminal">
