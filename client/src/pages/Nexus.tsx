@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { Link } from "wouter";
 
 export default function Nexus() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -731,7 +732,8 @@ export default function Nexus() {
 
       <div className="header-area">
         <div className="center-logo">
-          <h1 id="logo-text">Sads</h1>
+          <h1 id="logo-text">SADS</h1>
+          <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', letterSpacing: '0.1em', opacity: 0.8, color: 'var(--text-secondary)' }}>Prediction is protection.</p>
         </div>
       </div>
 
@@ -750,11 +752,11 @@ export default function Nexus() {
       </div>
 
       <div className="footer-links">
-        <a href="#" className="footer-link">Fluid Dynamics</a>
-        <a href="#" className="footer-link">Organic Shapes</a>
-        <a href="#" className="footer-link">Interactive Forms</a>
-        <a href="#" className="footer-link">Motion Studies</a>
-        <a href="#" className="footer-link">Contact</a>
+        <Link href="/app" className="footer-link">🔮 Predictive Console</Link>
+        <Link href="/orbiverse" className="footer-link">🌐 Orbiverse</Link>
+        <Link href="/docs" className="footer-link">📚 Docs</Link>
+        <Link href="/roadmap" className="footer-link">🚀 Roadmap</Link>
+        <Link href="/contact" className="footer-link">✉️ Contact</Link>
       </div>
 
       <div className="coordinates">

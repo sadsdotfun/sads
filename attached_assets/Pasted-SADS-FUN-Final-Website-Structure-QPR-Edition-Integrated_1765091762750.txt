@@ -1,0 +1,119 @@
+SADS.FUN — Final Website Structure (QPR Edition)
+Integrated seamlessly into your existing design
+🧭 Navigation (using what you already have)
+
+Your current links:
+
+Fluid Dynamics
+Organic Shapes
+Interactive Forms
+Motion Studies
+Contact
+
+
+➡ We convert them into your 5 core site destinations:
+
+Current Text	New Destination	New Label
+Fluid Dynamics	App	🔮 Predictive Console
+Organic Shapes	Orbiverse	🌐 Orbiverse
+Interactive Forms	Docs	📚 Docs
+Motion Studies	Roadmap	🚀 Roadmap
+Contact	Contact	✉️ Contact
+
+⭐ Same font
+⭐ Same positioning
+⭐ Same hover animation
+⭐ Just update the display text + href
+
+📍 Page Routing
+Page	Route
+Home	/
+Predictive Console	/app
+Orbiverse	/orbiverse
+Docs	/docs
+Roadmap	/roadmap
+Contact	/contact (optional MVP)
+🎭 How Navigation Feels
+
+On hover:
+
+Label gently brightens from #ccccff → #b374ff
+
+Subtle purple underline sweep (modify your current hover line)
+
+Slight x-offset push (already exists)
+
+Click:
+
+Quick purple flash in background (global transition class)
+
+Smooth scroll / page fade
+
+🧠 Content Pages Overview
+/app — Predictive Console
+
+Address input bar under center orb
+
+CTA: Run Prediction Scan
+
+Output in orbiting labels:
+
+Temporal Fragility Index
+
+Quantum Similarity Score
+
+Risk Event Window
+
+/orbiverse
+
+Full-screen galaxy of active entities
+
+Hover → QPR glow indicators
+
+Click → deep dive in app page
+
+/docs
+
+Developer-friendly dark UI
+
+Neon purple code style
+
+Sidebar nav + markdown support
+
+/roadmap
+
+Cosmic timeline scroll
+
+Each milestone lights up a star cluster
+
+🔩 Dev Implementation — Minimum Change
+
+In HTML:
+
+<div class="footer-links">
+  <a href="/app" class="footer-link">Predictive Console</a>
+  <a href="/orbiverse" class="footer-link">Orbiverse</a>
+  <a href="/docs" class="footer-link">Docs</a>
+  <a href="/roadmap" class="footer-link">Roadmap</a>
+  <a href="/contact" class="footer-link">Contact</a>
+</div>
+
+
+No JS or CSS change required unless we want the purple hover flash (optional).
+
+🎨 Brand Messaging Added Under Logo
+
+Replace Nexus. with:
+
+SADS — Solana Autonomous Discovery System
+
+
+or
+
+SADS.fun
+
+
+Under it:
+
+Prediction is protection.
+(optional rotating tagline: “Explore possibility, not history.”)
