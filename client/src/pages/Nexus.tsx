@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Link } from "wouter";
 
 export default function Nexus() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -756,13 +755,6 @@ export default function Nexus() {
         <span className="contact-email" onClick={handleEmailClick}>support@sads.fun</span>
       </div>
 
-      <div className="footer-links">
-        <Link href="/app" className="footer-link">Predictive Console</Link>
-        <Link href="/orbiverse" className="footer-link">Orbiverse</Link>
-        <Link href="/docs" className="footer-link">Docs</Link>
-        <Link href="/roadmap" className="footer-link">Roadmap</Link>
-        <Link href="/contact" className="footer-link">Contact</Link>
-      </div>
 
       <div className="coordinates">
         <p>Nexus State • Active</p>
