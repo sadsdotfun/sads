@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 export default function Nexus() {
@@ -6,6 +6,11 @@ export default function Nexus() {
   const storyTextRef = useRef<HTMLHeadingElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const requestRef = useRef<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEnterClick = () => {
+    setIsLoading(true);
+  };
 
   useEffect(() => {
     let scene: THREE.Scene, camera: THREE.OrthographicCamera, renderer: THREE.WebGLRenderer, material: THREE.ShaderMaterial;
@@ -728,6 +733,23 @@ export default function Nexus() {
       });
   };
 
+  if (isLoading) {
+    return (
+      <div className="loading-overlay" data-testid="loading-screen">
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+          <span className="loader-letter">L</span>
+          <span className="loader-letter">o</span>
+          <span className="loader-letter">a</span>
+          <span className="loader-letter">d</span>
+          <span className="loader-letter">i</span>
+          <span className="loader-letter">n</span>
+          <span className="loader-letter">g</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section className="section hero-section">
       <div id="container" ref={containerRef}></div>
@@ -748,7 +770,7 @@ export default function Nexus() {
           gravitational field extends 0.10 units into quantum foam<br />
           currently merging with 0 other entities
         </h2>
-        <button className="glow-button" data-testid="button-enter">Enter</button>
+        <button className="glow-button" onClick={handleEnterClick} data-testid="button-enter">Enter</button>
       </div>
 
       <div className="contact-info">
