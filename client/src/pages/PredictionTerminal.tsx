@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type RiskLevel = "Low" | "Moderate" | "Elevated" | "High" | "Critical";
+type ScanState = "idle" | "scanning" | "has_data" | "no_data" | "invalid";
 
 interface WatchlistItem {
   id: string;
@@ -81,16 +82,97 @@ function getSeverityIcon(severity: "High" | "Moderate" | "Info"): string {
 
 type TabId = "root-cause" | "dev-behavior" | "liquidity" | "network";
 
+function isValidSolanaAddress(address: string): boolean {
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+}
+
+function isKnownAddress(address: string): boolean {
+  return mockWatchlist.some(item => item.address.toLowerCase() === address.toLowerCase());
+}
+
 export default function PredictionTerminal() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAsset, setSelectedAsset] = useState<WatchlistItem | null>(mockWatchlist[0]);
   const [activeTab, setActiveTab] = useState<TabId>("root-cause");
   const [continuousMonitoring, setContinuousMonitoring] = useState(false);
+  const [scanState, setScanState] = useState<ScanState>("has_data");
+  const [scanAddress, setScanAddress] = useState("");
+  const [scanProgress, setScanProgress] = useState(0);
+  const scanIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const scanTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const currentScanIdRef = useRef<number>(0);
 
   const filteredWatchlist = mockWatchlist.filter(item => 
     item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleScan = (address: string) => {
+    if (scanIntervalRef.current) {
+      clearInterval(scanIntervalRef.current);
+      scanIntervalRef.current = null;
+    }
+    if (scanTimeoutRef.current) {
+      clearTimeout(scanTimeoutRef.current);
+      scanTimeoutRef.current = null;
+    }
+
+    if (!address.trim()) {
+      setScanState("idle");
+      return;
+    }
+
+    if (!isValidSolanaAddress(address)) {
+      setScanState("invalid");
+      return;
+    }
+
+    const scanId = ++currentScanIdRef.current;
+    setScanAddress(address);
+    setScanState("scanning");
+    setScanProgress(0);
+
+    scanIntervalRef.current = setInterval(() => {
+      setScanProgress(prev => {
+        if (prev >= 100) {
+          if (scanIntervalRef.current) clearInterval(scanIntervalRef.current);
+          return 100;
+        }
+        return prev + Math.random() * 15 + 5;
+      });
+    }, 200);
+
+    scanTimeoutRef.current = setTimeout(() => {
+      if (currentScanIdRef.current !== scanId) return;
+      
+      if (scanIntervalRef.current) {
+        clearInterval(scanIntervalRef.current);
+        scanIntervalRef.current = null;
+      }
+      setScanProgress(100);
+      
+      if (isKnownAddress(address)) {
+        const found = mockWatchlist.find(item => item.address.toLowerCase() === address.toLowerCase());
+        if (found) {
+          setSelectedAsset(found);
+          setScanState("has_data");
+        }
+      } else {
+        setScanState("no_data");
+      }
+    }, 2000);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleScan(searchQuery);
+  };
+
+  useEffect(() => {
+    if (selectedAsset) {
+      setScanState("has_data");
+    }
+  }, [selectedAsset]);
 
   return (
     <div className="min-h-screen bg-black text-white font-mono" data-testid="prediction-terminal">
@@ -100,14 +182,25 @@ export default function PredictionTerminal() {
         <aside className="w-72 border-r border-white/10 flex flex-col bg-black/50" data-testid="sidebar-watchlist">
           <div className="p-4 border-b border-white/10">
             <h2 className="text-sm font-semibold text-white/80 uppercase tracking-widest mb-4">Watchlist</h2>
-            <input
-              type="text"
-              placeholder="Search any Solana address..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-white/30"
-              data-testid="input-watchlist-search"
-            />
+            <form onSubmit={handleSearchSubmit}>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search or scan any address..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 pr-16 text-xs text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50"
+                  data-testid="input-watchlist-search"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 text-[10px] bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded transition-colors"
+                  data-testid="button-scan"
+                >
+                  SCAN
+                </button>
+              </div>
+            </form>
           </div>
           
           <div className="flex-1 overflow-y-auto p-2">
@@ -172,8 +265,131 @@ export default function PredictionTerminal() {
             {/* Center Panel */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               
-              {/* Real-Time Forecast Card */}
-              <section className="bg-white/[0.02] border border-white/10 rounded-xl p-6" data-testid="forecast-card">
+              {/* Idle State */}
+              {scanState === "idle" && (
+                <div className="flex-1 flex items-center justify-center min-h-[400px]" data-testid="state-idle">
+                  <div className="text-center max-w-md">
+                    <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                      <span className="text-3xl opacity-50">🔍</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-white/70 mb-2">Ready to Scan</h3>
+                    <p className="text-sm text-white/40 mb-6">
+                      Enter a Solana wallet address or token contract to analyze risk patterns and predict potential issues.
+                    </p>
+                    <div className="flex flex-col gap-2 text-[10px] text-white/30">
+                      <span>Paste any address in the search bar</span>
+                      <span>or select from your watchlist</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Scanning State */}
+              {scanState === "scanning" && (
+                <div className="flex-1 flex items-center justify-center min-h-[400px]" data-testid="state-scanning">
+                  <div className="text-center max-w-md">
+                    <div className="w-24 h-24 mx-auto mb-6 relative">
+                      <div className="absolute inset-0 rounded-full border-2 border-purple-500/20"></div>
+                      <div 
+                        className="absolute inset-0 rounded-full border-2 border-transparent border-t-purple-500 animate-spin"
+                        style={{ animationDuration: '1s' }}
+                      ></div>
+                      <div 
+                        className="absolute inset-2 rounded-full border-2 border-transparent border-t-purple-400/70 animate-spin"
+                        style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}
+                      ></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-sm font-bold text-purple-400">{Math.min(100, Math.round(scanProgress))}%</span>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-medium text-white/70 mb-2">Scanning Entity</h3>
+                    <p className="text-xs text-white/40 font-mono mb-4 truncate max-w-xs mx-auto">
+                      {scanAddress.slice(0, 20)}...{scanAddress.slice(-8)}
+                    </p>
+                    <div className="w-64 h-1 mx-auto bg-white/10 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-200"
+                        style={{ width: `${Math.min(100, scanProgress)}%` }}
+                      ></div>
+                    </div>
+                    <div className="mt-4 space-y-1 text-[10px] text-white/30">
+                      <p className={scanProgress > 20 ? 'text-purple-400' : ''}>Analyzing on-chain transactions...</p>
+                      <p className={scanProgress > 40 ? 'text-purple-400' : ''}>Mapping wallet relationships...</p>
+                      <p className={scanProgress > 60 ? 'text-purple-400' : ''}>Calculating risk patterns...</p>
+                      <p className={scanProgress > 80 ? 'text-purple-400' : ''}>Generating predictions...</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* No Data State */}
+              {scanState === "no_data" && (
+                <div className="flex-1 flex items-center justify-center min-h-[400px]" data-testid="state-no-data">
+                  <div className="text-center max-w-md">
+                    <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                      <span className="text-3xl">📭</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-yellow-400 mb-2">No Data Available</h3>
+                    <p className="text-sm text-white/40 mb-4">
+                      This address has insufficient on-chain history or activity for meaningful risk analysis.
+                    </p>
+                    <p className="text-xs text-white/30 font-mono mb-6 truncate max-w-xs mx-auto">
+                      {scanAddress}
+                    </p>
+                    <div className="space-y-2 text-[10px] text-white/30 mb-6">
+                      <p>Possible reasons:</p>
+                      <ul className="space-y-1 text-left inline-block">
+                        <li>• Newly created address with no transactions</li>
+                        <li>• Token not yet deployed or traded</li>
+                        <li>• Address has no associated token activity</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setScanState("idle")}
+                      className="px-4 py-2 text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded transition-colors"
+                      data-testid="button-try-another"
+                    >
+                      Try Another Address
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Invalid Address State */}
+              {scanState === "invalid" && (
+                <div className="flex-1 flex items-center justify-center min-h-[400px]" data-testid="state-invalid">
+                  <div className="text-center max-w-md">
+                    <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                      <span className="text-3xl">⚠️</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-red-400 mb-2">Invalid Address</h3>
+                    <p className="text-sm text-white/40 mb-4">
+                      The address you entered doesn't appear to be a valid Solana address format.
+                    </p>
+                    <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-6">
+                      <p className="text-xs text-red-400 mb-2">Address format requirements:</p>
+                      <ul className="text-[10px] text-white/40 space-y-1 text-left">
+                        <li>• Must be 32-44 characters long</li>
+                        <li>• Uses base58 encoding (no 0, O, I, l)</li>
+                        <li>• Contains only alphanumeric characters</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setScanState("idle")}
+                      className="px-4 py-2 text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded transition-colors"
+                      data-testid="button-try-again"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Has Data State - Show full dashboard */}
+              {scanState === "has_data" && (
+                <>
+                  {/* Real-Time Forecast Card */}
+                  <section className="bg-white/[0.02] border border-white/10 rounded-xl p-6" data-testid="forecast-card">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-sm font-semibold uppercase tracking-widest text-white/60">Overall Risk Forecast</h2>
                   <span 
@@ -372,6 +588,8 @@ export default function PredictionTerminal() {
                   )}
                 </div>
               </section>
+              </>
+              )}
             </div>
 
             {/* Right Side Panels */}
