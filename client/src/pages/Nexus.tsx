@@ -755,7 +755,7 @@ export default function Nexus() {
       {/* UI container removed as requested */}
 
       <div className="header-area">
-        <div className="center-logo">
+        <div className="center-logo" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img src="/logo.png" alt="SADS Logo" style={{ width: '50px', height: 'auto' }} />
           <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', letterSpacing: '0.1em', opacity: 0.8, color: 'var(--text-secondary)' }}>Prediction is protection.</p>
         </div>
