@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "wouter";
 import * as THREE from "three";
 
 export default function Nexus() {
@@ -7,9 +8,13 @@ export default function Nexus() {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const requestRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [, setLocation] = useLocation();
 
   const handleEnterClick = () => {
     setIsLoading(true);
+    setTimeout(() => {
+      setLocation("/terminal");
+    }, 2500);
   };
 
   useEffect(() => {

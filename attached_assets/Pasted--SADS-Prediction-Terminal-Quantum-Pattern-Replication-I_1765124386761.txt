@@ -1,0 +1,358 @@
+🚀 SADS Prediction Terminal
+
+Quantum Pattern Replication™ Interface
+Route: /terminal
+
+🌌 Page Positioning
+
+This is not a scan page.
+This is the cockpit where power users live.
+
+Focus:
+
+Real-time insights
+
+Multi-address monitoring
+
+Quant predictions & anomaly alerts
+
+Historical context
+
+Institutional UX
+
+Professional tone. Zero crypto-casino vibes.
+
+Think: Bloomberg + Palantir + Solana.
+
+🔷 Core UX Philosophy
+
+👉 Everything must answer these 3 questions instantly:
+
+1️⃣ Is this asset safe right now?
+2️⃣ When could a major risk event happen?
+3️⃣ What patterns are indicating the future?
+
+The UI is designed around those 3 answers.
+
+🧩 Terminal Feature Script
+
+The layout is column-based and crisp, with modular panels.
+
+| Sidebar — Watchlist & Filters
+| Main Stage — Predictions & Risk Feed
+| Side Panels — Insights & Timeline
+
+1️⃣ Left Sidebar — Asset Watchlist
+
+Section title:
+
+Watchlist
+
+Default card content:
+
+Token logo / label / last scan time
+
+Mini risk badge:
+
+Low / Moderate / Elevated / High / Critical
+
+Actions:
+
+Hover shows icons: [Pin] [Details] [Remove]
+
+Drag-to-reorder
+
+Spaces (like Discord channels):
+
+“Personal”, “DeFi”, “New Launches”, “Red Flags”
+
+Search bar:
+
+Search any Solana address…
+
+Button:
+
+Add Address to Watchlist
+
+2️⃣ Main Stage — Prediction Overview
+
+Top header:
+
+Current Status
+Live risk analytics updated every 10 seconds.
+
+Then two stacked sections:
+
+🔮 A) Real-Time Forecast Card (Wide)
+
+Display module:
+
+Overall Risk Forecast: High
+(Badge color updates dynamically)
+
+Under it:
+
+Metric	Value	Helper Note
+Quantum Similarity Score	0.81	Behavior matches prior rugs and liquidity exits
+Temporal Fragility Index	0.73	Imminent instability expected within 24–48h
+Liquidity Stability	23%	Insufficient liquidity depth
+Holder Symmetry	Whale-dominant	Top 10 wallets control 87%
+
+Refresh timestamp (muted):
+
+Data updated: 6 seconds ago
+
+⚠️ B) Risk Event Feed (Live Ticker)
+
+Ticker that auto-scrolls newest events:
+
+Sample items:
+
+🔴 High: Unusual increase in dev wallet outbound transactions (⏱ 18–30h forecast)
+
+🟡 Moderate: Rapid LP reduction detected (−12% in 10 mins)
+
+🔵 Info: Large new holder added — source low-reputation wallet
+
+Expandable row for each event:
+
+Summary
+What triggered it
+Historical context
+Probability vs time horizon
+Suggested action
+
+Call-to-action for flagged cases:
+
+Enable alerts for this address
+
+3️⃣ Right Side Panels — Time & Behavior Analysis
+
+Two vertical modules:
+
+⏱ A) Projected Risk Over Time (Graph)
+
+Title:
+
+Risk Projection Curve
+
+Small onboarding note:
+
+Scroll or click markers to explore future states.
+
+Graph plotted in 4 forecasts:
+
+Now (baseline)
+
+6h
+
+24h
+
+48h
+
+72h
+
+Markers glow when tapped:
+
+Tooltip example:
+
+Predicted peak: 0.91 risk
+Highly unstable behavior window projected
+Primary drivers:
+• Dev wallet surge
+• Concentrated liquidity inflow
+• Token distribution distortion
+
+Also:
+
+Confidence: 94%
+
+Tiny toggle under the graph:
+
+[ ] Continuous Monitoring (auto-rescan)
+
+🧬 B) Similar Behavior Clusters
+
+Title:
+
+Historical Pattern Matches
+
+Subtitle:
+
+This asset’s behavior mirrors these past incidents.
+
+Clean table:
+
+Match	Category	Outcome	Time To Failure
+92%	Meme token	Rug pull	26h
+84%	NFT project	Abandoned	72h
+78%	DeFi pool	Exploit	19h
+
+Link:
+
+Explore cluster lineage →
+
+Opens modal with:
+
+pattern similarity breakdown
+
+heatmaps of triggering behaviors
+
+risk coefficient contributions per factor
+
+4️⃣ Tertiary Tools (Tabs At Bottom)
+
+Tabs:
+
+🟣 Root Cause Analysis
+
+⚙️ Developer Behavior
+
+📈 Liquidity Structure
+
+🛰️ Network Relationships
+
+Each tab reveals a specialist view:
+
+📤 Root Cause Analysis
+
+What signal is actually causing prediction to spike?
+
+Card layout:
+
+Top trigger: “Dev wallet outbound transactions"
+
+Contribution: 41%
+
+Severity: High
+
+Secondary factors:
+
+Suspicious funding inflows
+
+Unburnt mint authority
+
+Missing token Metadata commitments
+
+Button:
+
+Show chain of events →
+
+Timeline animation reveals step-by-step precursor events.
+
+👨‍💻 Developer Behavior
+
+Focuses on:
+
+Known team wallets
+
+Token admin actions
+
+Authority transfers
+
+Signals:
+
+“Mint authority still active”
+
+“Recently edited metadata”
+
+“Owner wallet linked to prior incidents” (if applicable)
+
+💧 Liquidity Structure
+
+Clean, factual:
+
+Pool	Depth	Primary LP	Lock Status
+Raydium	42k	81% dev-owned	Unlocked
+Orca	9k	Thin depth	Unknown
+
+HP Bar: Liquidity Safety Index
+
+Muted note:
+
+Healthy liquidity doesn’t hide. It’s distributed.
+
+🧩 Network Relationships
+
+Graph node visualization (optional MVP → table)
+
+Purpose:
+
+Who’s connected to who?
+
+Shared wallet ancestry?
+
+Past linked behaviors?
+
+Insight text:
+
+This address is 2 degrees separated from a known rug cluster.
+
+Tag:
+
+“Investigate further”
+
+5️⃣ Scanning States & Edge Cases
+
+Idle State
+
+Scan any asset to begin predictive monitoring.
+
+Scanning
+
+Analyzing chain activity…
+(spinner + progress bar)
+
+No Data Yet
+
+This asset has insufficient history for predictive modeling.
+
+Address invalid
+
+Please enter a valid Solana address.
+
+6️⃣ Alerting System
+
+User actions trigger save to their profile:
+
+Button:
+
+Add to Alert Stream
+
+Tooltip:
+
+Get notified if this address enters a critical risk zone.
+
+Phases:
+
+Email alerts
+
+Telegram/Discord bot (later)
+
+Browser push notifications
+
+7️⃣ Professional Disclaimer (Footer)
+
+Predictions are generated from historical on-chain behavior and statistical modeling.
+They suggest probabilities, not certainties. Always verify information and conduct independent research.
+
+🌟 What Makes This Terminal Unique?
+Traditional scanners	SADS Prediction Terminal
+Snapshot data	Continuous monitoring
+Blacklist checks	Behavior modeling
+Manually reviewed indicators	Automated pattern learning
+Basic risk badges	Time-bound predictive insights
+“What happened?”	“What WILL happen?”
+
+Nobody on Solana offers time-based probabilistic risk forecasting.
+
+That’s your moat.
+
+🎯 Deliverables From This Script
+
+✔ Fully structured copy for every widget, label, state
+✔ Terminology aligned to scientific + professional tone
+✔ Logical UX flow users will trust
+✔ Clearly defined differentiators
+✔ Future features mapped cleanly
+✔ Branding consistent with serious analytics products

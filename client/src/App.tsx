@@ -5,11 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Nexus from "@/pages/Nexus";
+import PredictionTerminal from "@/pages/PredictionTerminal";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Nexus} />
+      <Route path="/terminal" component={PredictionTerminal} />
       <Route component={NotFound} />
     </Switch>
   );
