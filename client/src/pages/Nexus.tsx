@@ -102,13 +102,18 @@ export default function Nexus() {
       camera.position.z = 1;
       clock = new THREE.Clock();
 
-      renderer = new THREE.WebGLRenderer({
-        antialias: !isMobile && !isLowPowerDevice,
-        alpha: true,
-        powerPreference: isMobile ? "default" : "high-performance",
-        preserveDrawingBuffer: false,
-        premultipliedAlpha: false
-      });
+      try {
+        renderer = new THREE.WebGLRenderer({
+          antialias: !isMobile && !isLowPowerDevice,
+          alpha: true,
+          powerPreference: isMobile ? "default" : "high-performance",
+          preserveDrawingBuffer: false,
+          premultipliedAlpha: false
+        });
+      } catch (e) {
+        console.warn('WebGL not available, using fallback');
+        return;
+      }
       rendererRef.current = renderer;
 
       const pixelRatio = Math.min(devicePixelRatio, isMobile ? 1.5 : 2);

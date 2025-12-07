@@ -1,0 +1,280 @@
+Page title & intro
+
+Title (H1)
+
+Predictive Console
+
+Subtitle
+
+Quantum Pattern Replication for Solana.
+Forecast risk before it shows up on the chart.
+
+Helper line (small, muted under subtitle)
+
+These predictions are generated from historical wallet behavior, funding patterns, holder distribution, and liquidity movements. They are probabilistic, not guarantees.
+
+Address input / top section
+
+Field label
+
+Address
+
+Placeholder
+
+Paste a Solana wallet or token address
+
+Primary button (idle)
+
+Run Prediction Scan
+
+Primary button (loading)
+
+Analyzing on-chain patterns…
+
+Secondary text action
+
+Use a sample address
+
+Empty state message (before first scan)
+
+No prediction yet.
+Run a scan to see projected risk over time and how this address compares to historical incidents on Solana.
+
+After-scan: overall summary
+
+Section heading
+
+Prediction summary
+
+Overall risk label
+
+Overall Risk Forecast
+
+Possible values for overall risk
+
+Low
+
+Moderate
+
+Elevated
+
+High
+
+Critical
+
+Example full line:
+
+Overall Risk Forecast: High
+
+Metric 1 label
+
+Quantum Similarity Score
+
+Metric 1 description (tooltip or helper text)
+
+Measures how closely this address matches historical clusters of malicious or unstable behavior on Solana. Higher values indicate stronger similarity to past rugs, exploits, or collapses.
+
+Metric 2 label
+
+Temporal Fragility Index (TFI)
+
+Metric 2 description
+
+Estimates how fragile this address is over the next few days based on changes in balances, funding sources, and past outcomes of similar patterns.
+
+Predicted event window badge
+
+Predicted event window: 18–30 hours
+
+Last updated text
+
+Last on-chain update: 12 seconds ago
+
+Risk breakdown cards
+Card 1 — Temporal Fragility
+
+Title
+
+Temporal Fragility Index
+
+Status label (above the number)
+
+Stability status
+
+Possible statuses
+
+Stable
+
+Mildly Unstable
+
+Unstable
+
+Highly Unstable
+
+Body example
+
+This address shows movement and funding behavior consistent with assets that became unstable within the next 24–48 hours.
+
+Bullets (short, factual):
+
+Rapid shifts in key balances
+
+Inflows from low-reputation sources
+
+Activity out of line with age and size of the address
+
+Footer note (small)
+
+Higher fragility suggests a greater chance of sudden liquidity or price shocks.
+
+Card 2 — Quantum Similarity
+
+Title
+
+Quantum Similarity Score
+
+Status label
+
+Pattern match
+
+Example line
+
+Matches 73 past high-risk incidents with 82% similarity.
+
+Body text
+
+We compare this address against a curated set of historical rugs, exploits, and failures. A higher score means this behavior has been seen before — and often ended badly.
+
+Link CTA
+
+View similar cases →
+
+Card 3 — Liquidity & Holders
+
+Title
+
+Liquidity & Holder Structure
+
+Metric labels
+
+Liquidity stability
+
+Holder symmetry
+
+Example copy
+
+Liquidity stability: 21%
+Holder symmetry: Whale-dominant
+
+Body text
+
+Most supply and liquidity are controlled by a small number of wallets. This structure has historically correlated with higher rug and manipulation risk.
+
+Footer note
+
+Healthier assets tend to have deeper liquidity and a more distributed holder base.
+
+Risk over time section
+
+Section heading
+
+Projected risk over time
+
+Chart subtitle
+
+Forecasted risk levels based on current behavior and historical outcomes of similar patterns.
+
+Tooltip text when hovering a point
+
+Time window: 18–30 hours
+Predicted risk: 0.91
+Key drivers: dev wallet movement, LP imbalance, concentrated inflows.
+
+Toggle for future feature
+
+Enable continuous monitoring for this address
+
+Toggle helper text (muted):
+
+We’ll keep recalculating risk as new on-chain data appears.
+
+Similar historical cases section
+
+Section heading
+
+Similar historical cases
+
+Section subtitle
+
+Past incidents that behaved like this one — and how they ended.
+
+Table column headers
+
+Match
+
+Type
+
+Outcome
+
+Time to event
+
+Example rows
+
+Row 1:
+
+Match: 92%
+
+Type: Meme token
+
+Outcome: Rug pull
+
+Time to event: 26 hours after pattern detected
+
+Row 2:
+
+Match: 84%
+
+Type: NFT mint
+
+Outcome: Soft rug / abandonment
+
+Time to event: 3 days after launch
+
+Row 3:
+
+Match: 78%
+
+Type: DeFi pool
+
+Outcome: Liquidity exploit
+
+Time to event: 19 hours after pattern detected
+
+Row action text (small link)
+
+View incident details
+
+Footer note under table
+
+These comparisons are drawn from real Solana incidents where outcomes were confirmed. They are used only to highlight patterns, not to make absolute claims.
+
+Error / edge state copy
+
+Invalid address
+
+That doesn’t look like a valid Solana address.
+Please check it and try again.
+
+No data available
+
+We don’t have enough history on this address yet.
+Try again later or scan a more active wallet or token.
+
+Backend error / timeout
+
+We couldn’t complete this prediction right now.
+Please try again in a few seconds. If this keeps happening, check your network or RPC settings.
+
+Legal/safety disclaimer (bottom of the page)
+
+These forecasts are probabilistic and based on historical on-chain patterns. They are tools for risk awareness, not guarantees or financial advice. Always do your own research and never trade solely on a prediction.
