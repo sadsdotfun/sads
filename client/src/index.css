@@ -228,7 +228,7 @@ body::after {
 }
 
 .hero h1 {
-  font-family: var(--font-primary);
+  font-family: var(--font-secondary);
   font-weight: 400;
   font-size: var(--font-size-large);
   line-height: 0.9;
