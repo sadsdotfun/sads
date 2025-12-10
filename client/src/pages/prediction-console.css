@@ -476,6 +476,20 @@
   50% { opacity: 0.6; }
 }
 
+.card-container.settled {
+  cursor: not-allowed;
+}
+
+.card-container.settled .market-card-inner {
+  opacity: 0.6;
+  filter: grayscale(30%);
+}
+
+.card-container.settled .trade-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .card-top-row {
   display: flex;
   justify-content: space-between;

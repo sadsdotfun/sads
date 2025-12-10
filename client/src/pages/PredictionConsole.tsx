@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { markets, categories, sortOptions, Market } from "@/lib/markets";
 import { useWallet } from "@/hooks/useWallet";
+import { toast } from "sonner";
 import "./prediction-console.css";
 
 interface LivePriceData {
@@ -17,12 +18,24 @@ function MarketCard({ market, liveData, onClick }: { market: Market; liveData?: 
   const impliedProb = liveData?.impliedProbPercent ?? market.impliedProbPercent;
   const isLive = liveData?.isLive ?? false;
   const isHighConviction = impliedProb >= 70 || impliedProb <= 10;
+  const isSettled = impliedProb === 0 || impliedProb === 100;
+
+  const handleClick = () => {
+    if (isSettled) {
+      toast("Prediction already settled.", {
+        position: "bottom-right",
+        duration: 3000,
+      });
+      return;
+    }
+    onClick();
+  };
   
   return (
     <div 
-      className={`card-container noselect ${isHighConviction ? 'pulse-glow' : ''}`}
+      className={`card-container noselect ${isHighConviction ? 'pulse-glow' : ''} ${isSettled ? 'settled' : ''}`}
       data-testid={`card-market-${market.id}`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="card-canvas">
         <div className="tracker tr-1"></div>
