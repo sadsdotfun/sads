@@ -9,6 +9,7 @@ export interface Market {
   source: string;
   sourceUrl: string;
   tokenId?: string;
+  polymarketSlug?: string;
 }
 
 export const markets: Market[] = [
@@ -21,7 +22,8 @@ export const markets: Market[] = [
     yesPrice: 0.95,
     noPrice: 0.05,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/fed-decision-in-december"
+    sourceUrl: "https://polymarket.com/event/fed-decision-in-december",
+    polymarketSlug: "fed-decision-in-december"
   },
   {
     id: "gop-nominee-2028",
@@ -65,7 +67,8 @@ export const markets: Market[] = [
     yesPrice: 0.61,
     noPrice: 0.39,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/what-price-will-bitcoin-hit-in-2025"
+    sourceUrl: "https://polymarket.com/event/what-price-will-bitcoin-hit-in-2025",
+    polymarketSlug: "what-price-will-bitcoin-hit-in-2025"
   },
   {
     id: "btc-dec15-range",

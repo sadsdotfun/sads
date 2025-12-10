@@ -179,6 +179,7 @@ export default function TradingPage() {
   const [liveChartData, setLiveChartData] = useState<CandleData[]>([]);
   const [isLoadingChart, setIsLoadingChart] = useState(false);
   const [currentLivePrice, setCurrentLivePrice] = useState<number | null>(null);
+  const [liveDataFailed, setLiveDataFailed] = useState(false);
 
   const market = markets.find(m => m.id === params?.id);
 
@@ -187,66 +188,110 @@ export default function TradingPage() {
     
     const fetchPriceHistory = async () => {
       setIsLoadingChart(true);
+      setLiveDataFailed(false);
+      setLiveChartData([]);
+      setCurrentLivePrice(null);
+      let tokenId: string | null = market.tokenId || null;
+      
       try {
-        const searchTerms = market.title.split(' ').slice(0, 3).join(' ');
-        const findResponse = await fetch(`/api/polymarket/find?q=${encodeURIComponent(searchTerms)}`);
-        
-        if (!findResponse.ok) throw new Error('Failed to find market');
-        
-        const findData = await findResponse.json();
-        
-        if (findData.matches && findData.matches.length > 0) {
-          const matchedMarket = findData.matches[0];
-          const yesToken = matchedMarket.tokens?.find((t: any) => t.outcome === 'Yes');
+        // First use direct tokenId if available
+        if (!tokenId && market.polymarketSlug) {
+          const slugResponse = await fetch(`/api/polymarket/slug/${market.polymarketSlug}`);
           
-          if (yesToken?.token_id) {
-            const priceResponse = await fetch(`/api/polymarket/prices/${yesToken.token_id}?interval=30d`);
+          if (slugResponse.ok) {
+            const slugData = await slugResponse.json();
             
-            if (!priceResponse.ok) throw new Error('Failed to fetch prices');
-            
-            const data = await priceResponse.json();
-            
-            if (data.history && Array.isArray(data.history)) {
-              const candleMap = new Map<string, { prices: number[] }>();
+            if (slugData.markets && slugData.markets.length > 0) {
+              // Try to match by outcome title or pick first market
+              const matchedMarket = slugData.markets.find((m: any) => 
+                market.favoriteOutcome?.toLowerCase().includes(m.groupItemTitle?.toLowerCase()) ||
+                m.question?.toLowerCase().includes(market.title.toLowerCase())
+              ) || slugData.markets[0];
               
-              data.history.forEach((point: { t: number; p: number }) => {
-                const date = new Date(point.t * 1000).toISOString().split('T')[0];
-                if (!candleMap.has(date)) {
-                  candleMap.set(date, { prices: [] });
-                }
-                candleMap.get(date)!.prices.push(point.p);
-              });
+              const clobIds = matchedMarket?.clobTokenIds;
               
-              const candles: CandleData[] = [];
-              candleMap.forEach((value, date) => {
-                const prices = value.prices;
-                candles.push({
-                  time: date,
-                  open: prices[0],
-                  high: Math.max(...prices),
-                  low: Math.min(...prices),
-                  close: prices[prices.length - 1],
-                });
-              });
-              
-              candles.sort((a, b) => a.time.localeCompare(b.time));
-              setLiveChartData(candles);
-              
-              if (candles.length > 0) {
-                setCurrentLivePrice(candles[candles.length - 1].close);
+              if (clobIds && Array.isArray(clobIds) && clobIds.length > 0) {
+                tokenId = clobIds[0];
               }
             }
           }
         }
+        
+        // Fallback to title search if slug lookup failed
+        if (!tokenId) {
+          const searchTerms = market.title.split(' ').slice(0, 5).join(' ');
+          const findResponse = await fetch(`/api/polymarket/find?q=${encodeURIComponent(searchTerms)}`);
+          
+          if (findResponse.ok) {
+            const findData = await findResponse.json();
+            
+            if (findData.matches && findData.matches.length > 0) {
+              const matchedMarket = findData.matches[0];
+              const yesToken = matchedMarket.tokens?.find((t: any) => t.outcome === 'Yes');
+              
+              if (yesToken?.token_id) {
+                tokenId = yesToken.token_id;
+              }
+            }
+          }
+        }
+        
+        // Fetch price history if we found a token
+        if (tokenId) {
+          const priceResponse = await fetch(`/api/polymarket/prices/${tokenId}?interval=30d`);
+          
+          if (!priceResponse.ok) throw new Error('Failed to fetch prices');
+          
+          const data = await priceResponse.json();
+          
+          if (data.history && Array.isArray(data.history)) {
+            const candleMap = new Map<string, { prices: number[] }>();
+            
+            data.history.forEach((point: { t: number; p: number }) => {
+              const date = new Date(point.t * 1000).toISOString().split('T')[0];
+              if (!candleMap.has(date)) {
+                candleMap.set(date, { prices: [] });
+              }
+              candleMap.get(date)!.prices.push(point.p);
+            });
+            
+            const candles: CandleData[] = [];
+            candleMap.forEach((value, date) => {
+              const prices = value.prices;
+              candles.push({
+                time: date,
+                open: prices[0],
+                high: Math.max(...prices),
+                low: Math.min(...prices),
+                close: prices[prices.length - 1],
+              });
+            });
+            
+            candles.sort((a, b) => a.time.localeCompare(b.time));
+            setLiveChartData(candles);
+            
+            if (candles.length > 0) {
+              setCurrentLivePrice(candles[candles.length - 1].close);
+              setLiveDataFailed(false);
+            } else {
+              setLiveDataFailed(true);
+            }
+          } else {
+            setLiveDataFailed(true);
+          }
+        } else {
+          setLiveDataFailed(true);
+        }
       } catch (error) {
         console.error('Failed to fetch live prices:', error);
+        setLiveDataFailed(true);
       } finally {
         setIsLoadingChart(false);
       }
     };
     
     fetchPriceHistory();
-  }, [market?.id, market?.title]);
+  }, [market?.id, market?.title, market?.polymarketSlug, market?.tokenId]);
 
   const chartData = useMemo(() => {
     if (liveChartData.length > 0) {
@@ -302,6 +347,7 @@ export default function TradingPage() {
                 Current favorite: {market.favoriteOutcome} · {currentLivePrice ? `${(currentLivePrice * 100).toFixed(0)}%` : `${market.impliedProbPercent}%`} implied
                 {liveChartData.length > 0 && <span style={{ color: '#22c55e', marginLeft: '0.5rem' }}>● LIVE</span>}
                 {isLoadingChart && <span style={{ color: '#b374ff', marginLeft: '0.5rem' }}>Loading live data...</span>}
+                {liveDataFailed && liveChartData.length === 0 && !isLoadingChart && <span style={{ color: '#888', marginLeft: '0.5rem' }}>· Simulated</span>}
               </p>
             </div>
           </div>

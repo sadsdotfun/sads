@@ -189,6 +189,49 @@ export async function registerRoutes(
     }
   });
 
+  // Find Polymarket market by slug (more reliable)
+  app.get("/api/polymarket/slug/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      
+      const response = await fetch(
+        `${POLYMARKET_GAMMA_URL}/events?slug=${slug}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`Polymarket API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (Array.isArray(data) && data.length > 0) {
+        const event = data[0];
+        const markets = event.markets || [];
+        
+        const marketData = markets.map((m: any) => ({
+          question: m.question,
+          outcome: m.outcome,
+          outcomePrices: m.outcomePrices,
+          clobTokenIds: m.clobTokenIds,
+          groupItemTitle: m.groupItemTitle,
+        }));
+        
+        res.json({ 
+          event: {
+            title: event.title,
+            slug: event.slug,
+          },
+          markets: marketData 
+        });
+      } else {
+        res.json({ markets: [] });
+      }
+    } catch (error: any) {
+      console.error("Polymarket slug error:", error.message);
+      res.status(500).json({ error: "Failed to find market by slug" });
+    }
+  });
+
   app.post("/api/predict", async (req, res) => {
     try {
       const parsed = predictionRequestSchema.safeParse(req.body);
