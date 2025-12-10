@@ -10,6 +10,7 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
     <div 
       className={`card-container noselect ${isHighConviction ? 'pulse-glow' : ''}`}
       data-testid={`card-market-${market.id}`}
+      onClick={onClick}
     >
       <div className="card-canvas">
         <div className="tracker tr-1"></div>
@@ -37,7 +38,7 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
         <div className="tracker tr-23"></div>
         <div className="tracker tr-24"></div>
         <div className="tracker tr-25"></div>
-        <div className="market-card-inner" onClick={onClick}>
+        <div className="market-card-inner">
           <div className="card-top-row">
             <div className="market-category">{market.category}</div>
             <div className="privacy-shield">
