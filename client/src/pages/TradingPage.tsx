@@ -236,9 +236,6 @@ export default function TradingPage() {
               <li><strong>Volume:</strong> $115M</li>
               <li><strong>Liquidity:</strong> $7M</li>
             </ul>
-            <a href={market.sourceUrl} target="_blank" rel="noopener noreferrer" className="source-link" data-testid="link-source">
-              View full rules on {market.source} →
-            </a>
           </div>
         </div>
 
