@@ -4,22 +4,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: transparent;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
   z-index: 1000;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  padding: 1.5rem;
+  pointer-events: none;
 }
 
 .terminal-card {
@@ -27,12 +18,24 @@
   overflow: hidden;
   border: 1px solid #b374ff;
   border-radius: 12px;
-  background-color: rgba(179, 116, 255, 0.1);
+  background-color: rgba(20, 20, 25, 0.95);
   backdrop-filter: blur(8px);
   min-width: 344px;
   max-width: 90vw;
-  animation: slideUp 0.3s ease-out;
+  animation: slideIn 0.3s ease-out;
   box-shadow: 0 0 30px rgba(179, 116, 255, 0.3);
+  pointer-events: auto;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideUp {

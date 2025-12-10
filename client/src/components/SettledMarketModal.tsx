@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./SettledMarketModal.css";
 
 interface SettledMarketModalProps {
@@ -9,6 +9,15 @@ interface SettledMarketModalProps {
 export function SettledMarketModal({ isOpen, onClose }: SettledMarketModalProps) {
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleCopy = () => {
@@ -18,7 +27,7 @@ export function SettledMarketModal({ isOpen, onClose }: SettledMarketModalProps)
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose} data-testid="modal-settled-market">
+    <div className="modal-overlay" data-testid="modal-settled-market">
       <div className="terminal-card" onClick={(e) => e.stopPropagation()}>
         <div className="terminal-wrap">
           <div className="terminal">
