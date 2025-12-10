@@ -741,8 +741,19 @@ export default function Nexus() {
   if (isLoading) {
     return (
       <div className="loading-overlay" data-testid="loading-screen">
-        <div className="loader-wrapper">
-          <div className="loader"></div>
+        <div className="gameboy-loader">
+          <div className="gameboy-box">
+            <div className="top-side"></div>
+            <div className="bottom-side"></div>
+            <div className="gameboy-screen">
+              <div className="lightray-limit">
+                <div className="lightray"></div>
+              </div>
+              <div className="loader-box">
+                <div className="progress"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
