@@ -8,49 +8,62 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
   
   return (
     <div 
-      className={`market-card ${isHighConviction ? 'pulse-glow' : ''}`} 
-      onClick={onClick} 
+      className={`card-container noselect ${isHighConviction ? 'pulse-glow' : ''}`}
       data-testid={`card-market-${market.id}`}
     >
-      <div className="card-top-row">
-        <div className="market-category">{market.category}</div>
-        <div className="privacy-shield">
-          <span className="shield-icon">🛡</span>
-          <span className="shield-text">Level 5</span>
-        </div>
-      </div>
-      <h3 className="market-title">{market.title}</h3>
-      <p className="market-favorite">Consensus Signal: {market.favoriteOutcome}</p>
-      <div className="market-odds">
-        <div className="implied-prob">
-          <span className="prob-label">Probability:</span>
-          <span className="prob-value">{market.impliedProbPercent}%</span>
-        </div>
-        <div className="yes-no">
-          <span>Yes: {market.yesPrice.toFixed(2)}</span>
-          <span>No: {market.noPrice.toFixed(2)}</span>
-        </div>
-      </div>
-      <div className="market-footer">
-        <div className="footer-left">
-          <span className="private-settlement">Private Settlement</span>
-          <span className="payout-text">Payout: 1.00 USDC per verified signal</span>
-        </div>
-        <button className="trade-btn" data-testid={`button-trade-${market.id}`}>Trade</button>
-      </div>
-      <div className="card-hover-reveal">
-        <div className="mini-chart">
-          {[...Array(7)].map((_, i) => (
-            <div 
-              key={i} 
-              className="mini-bar" 
-              style={{ height: `${30 + Math.random() * 50}%` }}
-            />
-          ))}
-        </div>
-        <div className="hover-info">
-          <span>Resolution: Dec 31, 2025</span>
-          <span>Stability: High</span>
+      <div className="card-canvas">
+        <div className="tracker tr-1"></div>
+        <div className="tracker tr-2"></div>
+        <div className="tracker tr-3"></div>
+        <div className="tracker tr-4"></div>
+        <div className="tracker tr-5"></div>
+        <div className="tracker tr-6"></div>
+        <div className="tracker tr-7"></div>
+        <div className="tracker tr-8"></div>
+        <div className="tracker tr-9"></div>
+        <div className="tracker tr-10"></div>
+        <div className="tracker tr-11"></div>
+        <div className="tracker tr-12"></div>
+        <div className="tracker tr-13"></div>
+        <div className="tracker tr-14"></div>
+        <div className="tracker tr-15"></div>
+        <div className="tracker tr-16"></div>
+        <div className="tracker tr-17"></div>
+        <div className="tracker tr-18"></div>
+        <div className="tracker tr-19"></div>
+        <div className="tracker tr-20"></div>
+        <div className="tracker tr-21"></div>
+        <div className="tracker tr-22"></div>
+        <div className="tracker tr-23"></div>
+        <div className="tracker tr-24"></div>
+        <div className="tracker tr-25"></div>
+        <div className="market-card-inner" onClick={onClick}>
+          <div className="card-top-row">
+            <div className="market-category">{market.category}</div>
+            <div className="privacy-shield">
+              <span className="shield-icon">🛡</span>
+              <span className="shield-text">Level 5</span>
+            </div>
+          </div>
+          <h3 className="market-title">{market.title}</h3>
+          <p className="market-favorite">Consensus Signal: {market.favoriteOutcome}</p>
+          <div className="market-odds">
+            <div className="implied-prob">
+              <span className="prob-label">Probability:</span>
+              <span className="prob-value">{market.impliedProbPercent}%</span>
+            </div>
+            <div className="yes-no">
+              <span>Yes: {market.yesPrice.toFixed(2)}</span>
+              <span>No: {market.noPrice.toFixed(2)}</span>
+            </div>
+          </div>
+          <div className="market-footer">
+            <div className="footer-left">
+              <span className="private-settlement">Private Settlement</span>
+              <span className="payout-text">Payout: 1.00 USDC per verified signal</span>
+            </div>
+            <button className="trade-btn" data-testid={`button-trade-${market.id}`}>Trade</button>
+          </div>
         </div>
       </div>
     </div>
