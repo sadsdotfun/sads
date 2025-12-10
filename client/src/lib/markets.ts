@@ -8,6 +8,7 @@ export interface Market {
   noPrice: number;
   source: string;
   sourceUrl: string;
+  tokenId?: string;
 }
 
 export const markets: Market[] = [

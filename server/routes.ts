@@ -3,6 +3,29 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { predictionRequestSchema, type PredictionResponse } from "@shared/schema";
 
+interface PolymarketToken {
+  token_id: string;
+  outcome: string;
+  price: number;
+}
+
+interface PolymarketMarket {
+  condition_id: string;
+  question: string;
+  tokens: PolymarketToken[];
+  market_slug: string;
+  end_date_iso: string;
+  active: boolean;
+}
+
+interface PriceHistoryPoint {
+  t: number;
+  p: number;
+}
+
+const POLYMARKET_CLOB_URL = "https://clob.polymarket.com";
+const POLYMARKET_GAMMA_URL = "https://gamma-api.polymarket.com";
+
 function generateMockPrediction(address: string): PredictionResponse {
   const hash = address.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   const seed = (hash % 100) / 100;
@@ -67,6 +90,105 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   
+  // Polymarket price history endpoint
+  app.get("/api/polymarket/prices/:tokenId", async (req, res) => {
+    try {
+      const { tokenId } = req.params;
+      const interval = (req.query.interval as string) || "30d";
+      
+      const response = await fetch(
+        `${POLYMARKET_CLOB_URL}/prices-history?token_id=${tokenId}&interval=${interval}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`Polymarket API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      console.error("Polymarket prices error:", error.message);
+      res.status(500).json({ error: "Failed to fetch price history" });
+    }
+  });
+
+  // Polymarket market lookup endpoint
+  app.get("/api/polymarket/market/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      
+      const response = await fetch(
+        `${POLYMARKET_GAMMA_URL}/markets?slug=${slug}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`Polymarket API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      console.error("Polymarket market error:", error.message);
+      res.status(500).json({ error: "Failed to fetch market data" });
+    }
+  });
+
+  // Search Polymarket markets
+  app.get("/api/polymarket/search", async (req, res) => {
+    try {
+      const query = req.query.q as string || "";
+      const limit = parseInt(req.query.limit as string) || 20;
+      
+      const response = await fetch(
+        `${POLYMARKET_GAMMA_URL}/markets?closed=false&limit=${limit}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`Polymarket API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      console.error("Polymarket search error:", error.message);
+      res.status(500).json({ error: "Failed to search markets" });
+    }
+  });
+
+  // Find Polymarket market by title search
+  app.get("/api/polymarket/find", async (req, res) => {
+    try {
+      const search = (req.query.q as string || "").toLowerCase();
+      
+      const response = await fetch(
+        `${POLYMARKET_CLOB_URL}/simplified-markets`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`Polymarket API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.data && Array.isArray(data.data)) {
+        const matches = data.data.filter((m: any) => 
+          m.question?.toLowerCase().includes(search)
+        ).slice(0, 5).map((m: any) => ({
+          question: m.question,
+          tokens: m.tokens,
+          condition_id: m.condition_id,
+        }));
+        
+        res.json({ matches });
+      } else {
+        res.json({ matches: [] });
+      }
+    } catch (error: any) {
+      console.error("Polymarket find error:", error.message);
+      res.status(500).json({ error: "Failed to find market" });
+    }
+  });
+
   app.post("/api/predict", async (req, res) => {
     try {
       const parsed = predictionRequestSchema.safeParse(req.body);

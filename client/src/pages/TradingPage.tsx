@@ -176,13 +176,85 @@ export default function TradingPage() {
   const [amount, setAmount] = useState("");
   const { authenticated, shortAddress, connect, disconnect, placeBet } = useWallet();
   const [isPlacingBet, setIsPlacingBet] = useState(false);
+  const [liveChartData, setLiveChartData] = useState<CandleData[]>([]);
+  const [isLoadingChart, setIsLoadingChart] = useState(false);
+  const [currentLivePrice, setCurrentLivePrice] = useState<number | null>(null);
 
   const market = markets.find(m => m.id === params?.id);
 
+  useEffect(() => {
+    if (!market) return;
+    
+    const fetchPriceHistory = async () => {
+      setIsLoadingChart(true);
+      try {
+        const searchTerms = market.title.split(' ').slice(0, 3).join(' ');
+        const findResponse = await fetch(`/api/polymarket/find?q=${encodeURIComponent(searchTerms)}`);
+        
+        if (!findResponse.ok) throw new Error('Failed to find market');
+        
+        const findData = await findResponse.json();
+        
+        if (findData.matches && findData.matches.length > 0) {
+          const matchedMarket = findData.matches[0];
+          const yesToken = matchedMarket.tokens?.find((t: any) => t.outcome === 'Yes');
+          
+          if (yesToken?.token_id) {
+            const priceResponse = await fetch(`/api/polymarket/prices/${yesToken.token_id}?interval=30d`);
+            
+            if (!priceResponse.ok) throw new Error('Failed to fetch prices');
+            
+            const data = await priceResponse.json();
+            
+            if (data.history && Array.isArray(data.history)) {
+              const candleMap = new Map<string, { prices: number[] }>();
+              
+              data.history.forEach((point: { t: number; p: number }) => {
+                const date = new Date(point.t * 1000).toISOString().split('T')[0];
+                if (!candleMap.has(date)) {
+                  candleMap.set(date, { prices: [] });
+                }
+                candleMap.get(date)!.prices.push(point.p);
+              });
+              
+              const candles: CandleData[] = [];
+              candleMap.forEach((value, date) => {
+                const prices = value.prices;
+                candles.push({
+                  time: date,
+                  open: prices[0],
+                  high: Math.max(...prices),
+                  low: Math.min(...prices),
+                  close: prices[prices.length - 1],
+                });
+              });
+              
+              candles.sort((a, b) => a.time.localeCompare(b.time));
+              setLiveChartData(candles);
+              
+              if (candles.length > 0) {
+                setCurrentLivePrice(candles[candles.length - 1].close);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch live prices:', error);
+      } finally {
+        setIsLoadingChart(false);
+      }
+    };
+    
+    fetchPriceHistory();
+  }, [market?.id, market?.title]);
+
   const chartData = useMemo(() => {
+    if (liveChartData.length > 0) {
+      return liveChartData;
+    }
     if (!market) return [];
     return generatePredictionData(market.yesPrice, 90);
-  }, [market?.yesPrice, market?.id]);
+  }, [market?.yesPrice, market?.id, liveChartData]);
 
   if (!market) {
     return (
@@ -227,7 +299,9 @@ export default function TradingPage() {
             <div className="market-info-card-inner">
               <h1 className="trading-title">{market.title}</h1>
               <p className="trading-subtitle">
-                Current favorite: {market.favoriteOutcome} · {market.impliedProbPercent}% implied
+                Current favorite: {market.favoriteOutcome} · {currentLivePrice ? `${(currentLivePrice * 100).toFixed(0)}%` : `${market.impliedProbPercent}%`} implied
+                {liveChartData.length > 0 && <span style={{ color: '#22c55e', marginLeft: '0.5rem' }}>● LIVE</span>}
+                {isLoadingChart && <span style={{ color: '#b374ff', marginLeft: '0.5rem' }}>Loading live data...</span>}
               </p>
             </div>
           </div>
