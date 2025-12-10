@@ -218,132 +218,140 @@ export default function TradingPage() {
       <div className="trading-layout">
         <div className="trading-left">
           <div className="market-info-card">
-            <h1 className="trading-title">{market.title}</h1>
-            <p className="trading-subtitle">
-              Current favorite: {market.favoriteOutcome} · {market.impliedProbPercent}% implied
-            </p>
+            <div className="market-info-card-inner">
+              <h1 className="trading-title">{market.title}</h1>
+              <p className="trading-subtitle">
+                Current favorite: {market.favoriteOutcome} · {market.impliedProbPercent}% implied
+              </p>
+            </div>
           </div>
 
           <div className="chart-card">
-            <PredictionChart data={chartData} title={market.title} />
+            <div className="chart-card-inner">
+              <PredictionChart data={chartData} title={market.title} />
+            </div>
           </div>
 
           <div className="details-card">
-            <h3>Market Details</h3>
-            <ul className="details-list">
-              <li><strong>Resolution:</strong> Based on official outcome reporting</li>
-              <li><strong>End Date:</strong> December 31, 2025</li>
-              <li><strong>Volume:</strong> $115M</li>
-              <li><strong>Liquidity:</strong> $7M</li>
-            </ul>
+            <div className="details-card-inner">
+              <h3>Market Details</h3>
+              <ul className="details-list">
+                <li><strong>Resolution:</strong> Based on official outcome reporting</li>
+                <li><strong>End Date:</strong> December 31, 2025</li>
+                <li><strong>Volume:</strong> $115M</li>
+                <li><strong>Liquidity:</strong> $7M</li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div className="trading-right">
           <div className="trade-ticket">
-            <h3>Place Trade</h3>
+            <div className="trade-ticket-inner">
+              <h3>Place Trade</h3>
 
-            <div className="side-toggle">
-              <button
-                className={`side-btn ${selectedSide === 'yes' ? 'active yes' : ''}`}
-                onClick={() => setSelectedSide("yes")}
-                data-testid="button-yes"
-              >
-                YES
-              </button>
-              <button
-                className={`side-btn ${selectedSide === 'no' ? 'active no' : ''}`}
-                onClick={() => setSelectedSide("no")}
-                data-testid="button-no"
-              >
-                NO
-              </button>
+              <div className="side-toggle">
+                <button
+                  className={`side-btn ${selectedSide === 'yes' ? 'active yes' : ''}`}
+                  onClick={() => setSelectedSide("yes")}
+                  data-testid="button-yes"
+                >
+                  YES
+                </button>
+                <button
+                  className={`side-btn ${selectedSide === 'no' ? 'active no' : ''}`}
+                  onClick={() => setSelectedSide("no")}
+                  data-testid="button-no"
+                >
+                  NO
+                </button>
+              </div>
+
+              <div className="best-price">
+                <span className="price-label">Best {selectedSide.toUpperCase()}:</span>
+                <span className="price-value">{currentPrice.toFixed(2)} USDC</span>
+              </div>
+
+              <div className="amount-input-section">
+                <label className="input-label">Stake (USDC)</label>
+                <input
+                  type="number"
+                  className="amount-input"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                  data-testid="input-amount"
+                />
+                <div className="quick-amounts">
+                  <button onClick={() => handleQuickAmount(25)} data-testid="button-amount-25">+25</button>
+                  <button onClick={() => handleQuickAmount(50)} data-testid="button-amount-50">+50</button>
+                  <button onClick={() => handleQuickAmount(100)} data-testid="button-amount-100">+100</button>
+                  <button onClick={() => setAmount("1000")} data-testid="button-amount-max">Max</button>
+                </div>
+              </div>
+
+              <div className="calculated-section">
+                <div className="calc-row">
+                  <span>Estimated shares:</span>
+                  <span>{shares.toFixed(2)}</span>
+                </div>
+                <div className="calc-row">
+                  <span>Total return if win:</span>
+                  <span>{maxPayout.toFixed(2)} USDC</span>
+                </div>
+                <div className="calc-row profit">
+                  <span>Max payout (profit):</span>
+                  <span className="profit-value">+{potentialProfit.toFixed(2)} USDC</span>
+                </div>
+                <div className="calc-row highlight">
+                  <span>Implied edge:</span>
+                  <span>{impliedEdge}%</span>
+                </div>
+              </div>
+
+              {authenticated ? (
+                <button 
+                  className="submit-trade-btn connected" 
+                  onClick={async () => {
+                    if (amountNum <= 0) return;
+                    setIsPlacingBet(true);
+                    const result = await placeBet(amountNum, market.id, selectedSide);
+                    setIsPlacingBet(false);
+                    if (result.success) {
+                      setAmount("");
+                      alert(`Trade placed! TX: ${result.txId}`);
+                    } else {
+                      alert(`Trade failed: ${result.error}`);
+                    }
+                  }}
+                  disabled={isPlacingBet || amountNum <= 0}
+                  data-testid="button-submit-trade"
+                >
+                  {isPlacingBet ? "Placing trade..." : `Trade ${selectedSide.toUpperCase()}`}
+                </button>
+              ) : (
+                <button 
+                  className="submit-trade-btn" 
+                  onClick={connect}
+                  data-testid="button-connect-trade"
+                >
+                  Connect Phantom to trade
+                </button>
+              )}
+
+              {authenticated && (
+                <div className="wallet-status">
+                  <span className="wallet-address">{shortAddress}</span>
+                  <button className="disconnect-btn" onClick={disconnect} data-testid="button-disconnect-trade">Disconnect</button>
+                </div>
+              )}
+
+              <p className="gas-note">Gas & fees shown before confirm.</p>
+
+              <p className="risk-footer">
+                Prediction markets are high risk. Do not trade more than you can afford to lose.
+              </p>
             </div>
-
-            <div className="best-price">
-              <span className="price-label">Best {selectedSide.toUpperCase()}:</span>
-              <span className="price-value">{currentPrice.toFixed(2)} USDC</span>
-            </div>
-
-            <div className="amount-input-section">
-              <label className="input-label">Stake (USDC)</label>
-              <input
-                type="number"
-                className="amount-input"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                data-testid="input-amount"
-              />
-              <div className="quick-amounts">
-                <button onClick={() => handleQuickAmount(25)} data-testid="button-amount-25">+25</button>
-                <button onClick={() => handleQuickAmount(50)} data-testid="button-amount-50">+50</button>
-                <button onClick={() => handleQuickAmount(100)} data-testid="button-amount-100">+100</button>
-                <button onClick={() => setAmount("1000")} data-testid="button-amount-max">Max</button>
-              </div>
-            </div>
-
-            <div className="calculated-section">
-              <div className="calc-row">
-                <span>Estimated shares:</span>
-                <span>{shares.toFixed(2)}</span>
-              </div>
-              <div className="calc-row">
-                <span>Total return if win:</span>
-                <span>{maxPayout.toFixed(2)} USDC</span>
-              </div>
-              <div className="calc-row profit">
-                <span>Max payout (profit):</span>
-                <span className="profit-value">+{potentialProfit.toFixed(2)} USDC</span>
-              </div>
-              <div className="calc-row highlight">
-                <span>Implied edge:</span>
-                <span>{impliedEdge}%</span>
-              </div>
-            </div>
-
-            {authenticated ? (
-              <button 
-                className="submit-trade-btn connected" 
-                onClick={async () => {
-                  if (amountNum <= 0) return;
-                  setIsPlacingBet(true);
-                  const result = await placeBet(amountNum, market.id, selectedSide);
-                  setIsPlacingBet(false);
-                  if (result.success) {
-                    setAmount("");
-                    alert(`Trade placed! TX: ${result.txId}`);
-                  } else {
-                    alert(`Trade failed: ${result.error}`);
-                  }
-                }}
-                disabled={isPlacingBet || amountNum <= 0}
-                data-testid="button-submit-trade"
-              >
-                {isPlacingBet ? "Placing trade..." : `Trade ${selectedSide.toUpperCase()}`}
-              </button>
-            ) : (
-              <button 
-                className="submit-trade-btn" 
-                onClick={connect}
-                data-testid="button-connect-trade"
-              >
-                Connect Phantom to trade
-              </button>
-            )}
-
-            {authenticated && (
-              <div className="wallet-status">
-                <span className="wallet-address">{shortAddress}</span>
-                <button className="disconnect-btn" onClick={disconnect} data-testid="button-disconnect-trade">Disconnect</button>
-              </div>
-            )}
-
-            <p className="gas-note">Gas & fees shown before confirm.</p>
-
-            <p className="risk-footer">
-              Prediction markets are high risk. Do not trade more than you can afford to lose.
-            </p>
           </div>
         </div>
       </div>
