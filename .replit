@@ -19,6 +19,10 @@ externalPort = 80
 localPort = 32915
 externalPort = 3000
 
+[[ports]]
+localPort = 40155
+externalPort = 3001
+
 [env]
 PORT = "5000"
 
@@ -45,3 +49,8 @@ waitForPort = 5000
 
 [agent]
 mockupState = "FULLSTACK"
+
+[userenv]
+
+[userenv.shared]
+VITE_PRIVY_APP_ID = "cmizjjqmu039kl70d4ivywv11"
