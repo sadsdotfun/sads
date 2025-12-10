@@ -14,13 +14,13 @@ export const markets: Market[] = [
   {
     id: "fed-rate-cuts-2025",
     category: "Economy",
-    title: "How many Fed rate cuts in 2025?",
-    favoriteOutcome: "3 cuts (75 bps)",
-    impliedProbPercent: 97,
-    yesPrice: 0.97,
-    noPrice: 0.03,
+    title: "Fed rate cut in December 2025?",
+    favoriteOutcome: "25 bps cut",
+    impliedProbPercent: 95,
+    yesPrice: 0.95,
+    noPrice: 0.05,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/2025-predictions"
+    sourceUrl: "https://polymarket.com/event/fed-decision-in-december"
   },
   {
     id: "gop-nominee-2028",
@@ -60,9 +60,9 @@ export const markets: Market[] = [
     category: "Crypto",
     title: "What price will Bitcoin hit in 2025?",
     favoriteOutcome: "Ends above $95,000",
-    impliedProbPercent: 72,
-    yesPrice: 0.73,
-    noPrice: 0.29,
+    impliedProbPercent: 61,
+    yesPrice: 0.61,
+    noPrice: 0.39,
     source: "Polymarket",
     sourceUrl: "https://polymarket.com/event/what-price-will-bitcoin-hit-in-2025"
   },
@@ -124,24 +124,24 @@ export const markets: Market[] = [
   {
     id: "trump-tariffs-china",
     category: "Economy",
-    title: "Will Trump impose 60% tariffs on China in 2025?",
-    favoriteOutcome: "Yes",
-    impliedProbPercent: 62,
-    yesPrice: 0.62,
-    noPrice: 0.38,
+    title: "Trump imposes 100% tariff on China before July?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 15,
+    yesPrice: 0.15,
+    noPrice: 0.85,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/tariffs"
+    sourceUrl: "https://polymarket.com/event/trump-imposes-100-tariff-on-china-before-july"
   },
   {
     id: "us-recession-2025",
     category: "Economy",
     title: "Will the US enter a recession in 2025?",
     favoriteOutcome: "No",
-    impliedProbPercent: 22,
-    yesPrice: 0.22,
-    noPrice: 0.78,
+    impliedProbPercent: 3,
+    yesPrice: 0.03,
+    noPrice: 0.97,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/recession"
+    sourceUrl: "https://polymarket.com/event/us-recession-in-2025"
   },
   {
     id: "desantis-2028",
@@ -166,26 +166,26 @@ export const markets: Market[] = [
     sourceUrl: "https://polymarket.com/search/pardon"
   },
   {
-    id: "sol-500-2025",
+    id: "sol-ath-2025",
     category: "Crypto",
-    title: "Will Solana hit $500 in 2025?",
+    title: "Solana all time high before 2026?",
     favoriteOutcome: "No",
-    impliedProbPercent: 18,
-    yesPrice: 0.18,
-    noPrice: 0.82,
+    impliedProbPercent: 7,
+    yesPrice: 0.07,
+    noPrice: 0.93,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/solana"
+    sourceUrl: "https://polymarket.com/event/solana-all-time-high-before-2026"
   },
   {
     id: "btc-150k-2025",
     category: "Crypto",
     title: "Will Bitcoin hit $150,000 in 2025?",
     favoriteOutcome: "No",
-    impliedProbPercent: 31,
-    yesPrice: 0.31,
-    noPrice: 0.69,
+    impliedProbPercent: 8,
+    yesPrice: 0.08,
+    noPrice: 0.92,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/bitcoin"
+    sourceUrl: "https://polymarket.com/event/when-will-bitcoin-hit-150k"
   },
   {
     id: "nintendo-switch-2",
