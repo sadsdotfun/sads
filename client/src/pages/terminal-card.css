@@ -355,3 +355,44 @@
   right: var(--t);
   height: var(--w);
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  min-width: 300px;
+}
+
+.loading-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: #b374ff;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.loading-bar-wrapper {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(179, 116, 255, 0.3);
+}
+
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #b374ff, #ccaaff);
+  border-radius: 4px;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 10px rgba(179, 116, 255, 0.5);
+}
+
+.loading-percent {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: 600;
+}

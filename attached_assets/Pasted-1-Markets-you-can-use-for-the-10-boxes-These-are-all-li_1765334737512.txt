@@ -1,0 +1,322 @@
+1. Markets you can use for the 10 boxes
+
+These are all live Polymarket markets & odds (snapshot as of today – they’ll drift in production):
+
+How many Fed rate cuts in 2025?
+
+Favorite outcome: “3 cuts (75 bps)” – ~97% chance. 
+Polymarket
+
+Republican Presidential Nominee 2028
+
+J.D. Vance – ~55% implied chance. 
+Polymarket
+
+Democratic Presidential Nominee 2028
+
+Gavin Newsom – ~37% implied chance. 
+Polymarket
++1
+
+Time 2025 Person of the Year
+
+Market favorite: “Artificial Intelligence” – ~69% chance. 
+Polymarket
+
+What price will Bitcoin hit in 2025?
+
+Outcome “↑ 95,000” – ~72%, with Yes around $0.73 and No around $0.29 per share. 
+Polymarket
++1
+
+Bitcoin price on December 15, 2025
+
+Range 92k–94k – ~16% chance, Yes ≈ $0.18, No ≈ $0.86. 
+Polymarket
+
+What price will Ethereum hit in 2025?
+
+Outcome “$5,000” – ~3% chance. 
+Polymarket
+
+GTA VI released in 2025?
+
+Yes <1% chance. 
+Polymarket
++1
+
+GTA VI released before June 2026?
+
+Yes ~4% chance. 
+Polymarket
++1
+
+Elon Musk # tweets Dec 5–12, 2025
+
+Outcome “440–459 tweets – ~19%” chance. 
+Polymarket
+
+Remember: on-chain, each YES share always pays 1.00 USDC if the outcome happens, 0 if not – that’s your “payout” structure. Your UI just converts the current YES price into implied odds + max payout.
+
+2. Data config for the frontend
+
+You can drop this into a markets.ts or similar and feed it into your React / Next app:
+
+export const markets = [
+  {
+    id: "fed-rate-cuts-2025",
+    category: "Economy",
+    title: "How many Fed rate cuts in 2025?",
+    favoriteOutcome: "3 cuts (75 bps)",
+    impliedProbPercent: 97,
+    yesPrice: 0.97,
+    noPrice: 0.03,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/2025-predictions"
+  },
+  {
+    id: "gop-nominee-2028",
+    category: "Politics",
+    title: "Republican Presidential Nominee 2028",
+    favoriteOutcome: "J.D. Vance",
+    impliedProbPercent: 55,
+    yesPrice: 0.55,
+    noPrice: 0.45,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/all"
+  },
+  {
+    id: "dem-nominee-2028",
+    category: "Politics",
+    title: "Democratic Presidential Nominee 2028",
+    favoriteOutcome: "Gavin Newsom",
+    impliedProbPercent: 37,
+    yesPrice: 0.37,
+    noPrice: 0.63,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/all"
+  },
+  {
+    id: "time-poy-2025",
+    category: "Culture",
+    title: "Time 2025 Person of the Year",
+    favoriteOutcome: "Artificial Intelligence",
+    impliedProbPercent: 69,
+    yesPrice: 0.69,
+    noPrice: 0.31,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/all"
+  },
+  {
+    id: "btc-hit-95k-2025",
+    category: "Crypto",
+    title: "What price will Bitcoin hit in 2025?",
+    favoriteOutcome: "Ends above $95,000",
+    impliedProbPercent: 72,
+    yesPrice: 0.73, // snapshot
+    noPrice: 0.29,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/event/what-price-will-bitcoin-hit-in-2025"
+  },
+  {
+    id: "btc-dec15-range",
+    category: "Crypto",
+    title: "Bitcoin price on December 15, 2025",
+    favoriteOutcome: "$92k–$94k range",
+    impliedProbPercent: 16,
+    yesPrice: 0.18,
+    noPrice: 0.86,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/event/bitcoin-price-on-december-15"
+  },
+  {
+    id: "eth-5000-2025",
+    category: "Crypto",
+    title: "What price will Ethereum hit in 2025?",
+    favoriteOutcome: "Hits $5,000",
+    impliedProbPercent: 3,
+    yesPrice: 0.03,
+    noPrice: 0.97,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/all"
+  },
+  {
+    id: "gta-2025-release",
+    category: "Gaming",
+    title: "GTA VI released in 2025?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 1, // “<1%” -> treat as ~1
+    yesPrice: 0.01,
+    noPrice: 0.99,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/event/gta-vi-released-in-2025"
+  },
+  {
+    id: "gta-before-june-2026",
+    category: "Gaming",
+    title: "GTA VI released before June 2026?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 4,
+    yesPrice: 0.04,
+    noPrice: 0.96,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/event/will-gta-6-cost-100"
+  },
+  {
+    id: "elon-tweets-week",
+    category: "Social / Meme",
+    title: "Elon Musk # tweets (Dec 5–12, 2025)",
+    favoriteOutcome: "440–459 tweets",
+    impliedProbPercent: 19,
+    yesPrice: 0.19,
+    noPrice: 0.81,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/all"
+  }
+];
+
+
+In production you’d overwrite yesPrice/noPrice with live data from your SADS backend or a Polymarket API mirror, but this gives you legit real-world numbers to demo with.
+
+3. Layout script for the Prediction Console page
+
+Think of the app page as:
+
+Dark, minimal, same vibe as your SADS graphics.
+
+Left-aligned header, right-aligned wallet button.
+
+2–3 column grid of those 10 boxes.
+
+Top bar
+
+Logo: SADS glyph + “SADS Prediction Console” text.
+
+Status pill: “Mainnet • Live odds”.
+
+Wallet button: “Connect Wallet” (Phantom / Solflare etc).
+
+Filters row
+
+Category pills: All, Economy, Politics, Crypto, Gaming, Culture, Meme.
+
+Sort dropdown: Most Active, Ending Soon, Highest Implied Edge.
+
+Market card (each of the 10 boxes)
+
+For each item in markets:
+
+Top-left: small category chip (e.g. Politics).
+
+Main title: market title.
+
+Subline: favoriteOutcome, eg:
+
+“Market favorite: 3 cuts (75 bps total)”
+
+Big number row:
+
+Left: Implied: 97% in soft purple.
+
+Right: Yes: 0.97 • No: 0.03 (small, muted).
+
+Footer:
+
+“Payout: 1.00 USDC per winning share.”
+
+Button: “Trade” ➜ opens the detailed trading page / modal.
+
+Cards should feel like tiles in Polymarket but more SADS-branded: rounded corners, slight glow, hover that raises the card + brightens the probability.
+
+4. Script for the Trading Page (when a box is clicked)
+
+Route: /markets/[id] or open as a modal.
+
+Layout
+
+Two-column layout on desktop:
+
+Left: Market context + chart
+
+Right: Trade ticket
+
+Left column
+
+Breadcrumb + title
+
+Breadcrumb: Prediction Console / Politics / Republican Presidential Nominee 2028
+
+Title: Republican Presidential Nominee 2028
+
+Subtitle: Current favorite: J.D. Vance · 55% implied
+
+Odds chart
+
+Card with:
+
+Tabs: 24h, 7d, 30d, All
+
+Line chart of implied YES probability over time.
+
+Hover tooltip: Dec 8, 2025 – Yes: 0.52 • No: 0.48.
+
+Small caption: “Data sourced from on-chain orderflow, updated in real time.”
+
+Market details
+
+Bullet list:
+
+Resolution rule (short summary pulled from original market).
+
+End date.
+
+Volume & liquidity (like $115m volume • $7m liquidity). 
+Polymarket
+
+Link: “View full rules on Polymarket” ➜ sourceUrl (optional).
+
+Right column – Trade ticket
+
+Card titled “Place Trade”:
+
+Toggle pills at top: YES / NO.
+
+Display current best price:
+
+Best YES: 0.73 USDC
+
+Best NO: 0.27 USDC (pulled from your snapshot / feed).
+
+Amount input
+
+Label: Stake (USDC)
+
+Input with quick buttons: +25, +50, +100, Max.
+
+Calculated section (auto-updating):
+
+Estimated shares: amount / price
+
+Max payout: shares * 1.00
+
+Implied edge: (1 - price) * 100% if they’re buying Yes.
+
+Wallet state
+
+If not connected:
+
+Button: Connect wallet to trade.
+
+If connected:
+
+Button: Submit trade (primary, full-width).
+
+Underneath: “Gas & fees shown before confirm.”
+
+Risk footer
+
+Small text:
+
+Prediction markets are high risk. Do not trade more than you can afford to lose.
+
+Same page layout works for any card in the grid – only the title, favorite outcome, prices and chart data change.
