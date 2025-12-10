@@ -1,44 +1,16 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import { markets } from "@/lib/markets";
+import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import "./trading-page.css";
 
-interface CandleData {
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-const generateCandleData = (days: number, baseValue: number): CandleData[] => {
-  const data: CandleData[] = [];
-  let value = baseValue;
-  
-  for (let i = days; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    
-    const volatility = 0.05;
-    const change = (Math.random() - 0.5) * volatility;
-    const open = value;
-    const close = Math.max(0.01, Math.min(0.99, value + change));
-    const high = Math.max(open, close) + Math.random() * volatility * 0.5;
-    const low = Math.min(open, close) - Math.random() * volatility * 0.5;
-    
-    data.push({
-      date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      open: Math.max(0.01, Math.min(0.99, open)),
-      high: Math.max(0.01, Math.min(0.99, high)),
-      low: Math.max(0.01, Math.min(0.99, low)),
-      close: Math.max(0.01, Math.min(0.99, close)),
-      volume: Math.floor(Math.random() * 100000) + 10000
-    });
-    
-    value = close;
-  }
-  return data;
+const categoryToSymbol: Record<string, string> = {
+  "Crypto": "BINANCE:BTCUSDT",
+  "Politics": "TVC:SPX",
+  "Economy": "TVC:DXY",
+  "Culture": "NASDAQ:META",
+  "Gaming": "NASDAQ:EA",
+  "Social / Meme": "BINANCE:DOGEUSDT",
 };
 
 export default function TradingPage() {
@@ -46,15 +18,8 @@ export default function TradingPage() {
   const [, setLocation] = useLocation();
   const [selectedSide, setSelectedSide] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState("");
-  const [timeframe, setTimeframe] = useState("30d");
-  const [hoveredCandle, setHoveredCandle] = useState<CandleData | null>(null);
 
   const market = markets.find(m => m.id === params?.id);
-
-  const chartData = useMemo(() => {
-    const days = timeframe === "24h" ? 24 : timeframe === "7d" ? 7 : timeframe === "30d" ? 30 : 90;
-    return generateCandleData(days, market?.yesPrice || 0.5);
-  }, [timeframe, market?.yesPrice]);
 
   if (!market) {
     return (
@@ -81,9 +46,7 @@ export default function TradingPage() {
     });
   };
 
-  const minPrice = Math.min(...chartData.map(d => d.low)) * 0.95;
-  const maxPrice = Math.max(...chartData.map(d => d.high)) * 1.05;
-  const priceRange = maxPrice - minPrice;
+  const chartSymbol = categoryToSymbol[market.category] || "BINANCE:BTCUSDT";
 
   return (
     <div className="trading-page" data-testid="trading-page">
@@ -107,81 +70,24 @@ export default function TradingPage() {
           </div>
 
           <div className="chart-card">
-            <div className="chart-header-row">
-              <div className="chart-tabs">
-                {["24h", "7d", "30d", "All"].map(tf => (
-                  <button
-                    key={tf}
-                    className={`chart-tab ${timeframe === tf ? 'active' : ''}`}
-                    onClick={() => setTimeframe(tf)}
-                    data-testid={`button-timeframe-${tf.toLowerCase()}`}
-                  >
-                    {tf}
-                  </button>
-                ))}
-              </div>
-              {hoveredCandle && (
-                <div className="chart-tooltip-inline">
-                  <span>{hoveredCandle.date}</span>
-                  <span className="tooltip-o">O: {(hoveredCandle.open * 100).toFixed(1)}%</span>
-                  <span className="tooltip-h">H: {(hoveredCandle.high * 100).toFixed(1)}%</span>
-                  <span className="tooltip-l">L: {(hoveredCandle.low * 100).toFixed(1)}%</span>
-                  <span className={`tooltip-c ${hoveredCandle.close >= hoveredCandle.open ? 'green' : 'red'}`}>
-                    C: {(hoveredCandle.close * 100).toFixed(1)}%
-                  </span>
-                </div>
-              )}
+            <div className="tradingview-container">
+              <AdvancedRealTimeChart
+                symbol={chartSymbol}
+                theme="dark"
+                autosize
+                interval="D"
+                timezone="Etc/UTC"
+                style="1"
+                locale="en"
+                toolbar_bg="#0a0a15"
+                enable_publishing={false}
+                hide_top_toolbar={false}
+                hide_legend={false}
+                save_image={false}
+                container_id="tradingview_chart"
+              />
             </div>
-            
-            <div className="tradingview-chart">
-              <div className="chart-y-axis">
-                <span>{(maxPrice * 100).toFixed(0)}%</span>
-                <span>{((maxPrice + minPrice) / 2 * 100).toFixed(0)}%</span>
-                <span>{(minPrice * 100).toFixed(0)}%</span>
-              </div>
-              <div className="candle-container">
-                {chartData.map((candle, i) => {
-                  const isGreen = candle.close >= candle.open;
-                  const bodyTop = ((maxPrice - Math.max(candle.open, candle.close)) / priceRange) * 100;
-                  const bodyHeight = (Math.abs(candle.close - candle.open) / priceRange) * 100;
-                  const wickTop = ((maxPrice - candle.high) / priceRange) * 100;
-                  const wickBottom = ((maxPrice - candle.low) / priceRange) * 100;
-                  
-                  return (
-                    <div
-                      key={i}
-                      className="candle"
-                      onMouseEnter={() => setHoveredCandle(candle)}
-                      onMouseLeave={() => setHoveredCandle(null)}
-                    >
-                      <div
-                        className="candle-wick"
-                        style={{
-                          top: `${wickTop}%`,
-                          height: `${wickBottom - wickTop}%`,
-                          backgroundColor: isGreen ? '#22c55e' : '#ef4444'
-                        }}
-                      />
-                      <div
-                        className={`candle-body ${isGreen ? 'green' : 'red'}`}
-                        style={{
-                          top: `${bodyTop}%`,
-                          height: `${Math.max(bodyHeight, 1)}%`
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            <div className="chart-x-axis">
-              <span>{chartData[0]?.date}</span>
-              <span>{chartData[Math.floor(chartData.length / 2)]?.date}</span>
-              <span>{chartData[chartData.length - 1]?.date}</span>
-            </div>
-            
-            <p className="chart-caption">Data sourced from on-chain orderflow, updated in real time.</p>
+            <p className="chart-caption">Live market data from TradingView. Related asset shown for reference.</p>
           </div>
 
           <div className="details-card">

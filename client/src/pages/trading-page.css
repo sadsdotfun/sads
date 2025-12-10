@@ -74,7 +74,15 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(179, 116, 255, 0.15);
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.tradingview-container {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .chart-header-row {
