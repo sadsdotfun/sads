@@ -123,21 +123,33 @@
 }
 
 .wallet-btn {
-  background: linear-gradient(135deg, #b374ff 0%, #8b5cf6 100%);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  background-color: #000;
+  color: #b374ff;
+  border: 2px solid #b374ff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.8em;
   font-size: 0.8rem;
   font-family: var(--font-secondary);
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s;
   letter-spacing: 0.05em;
+  box-shadow: -3px 3px 0px 0px #b374ff;
 }
 
 .wallet-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(179, 116, 255, 0.4);
+  transform: translate(3px, -3px);
+  box-shadow: -4px 4px 0px 0px #b374ff;
+}
+
+.wallet-btn.connected {
+  border-color: #22c55e;
+  color: #22c55e;
+  box-shadow: -3px 3px 0px 0px #22c55e;
+}
+
+.wallet-btn.connected:hover {
+  box-shadow: -4px 4px 0px 0px #22c55e;
 }
 
 .wallet-note {
