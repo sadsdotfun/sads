@@ -142,6 +142,7 @@ export function PrivyWrapper({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: 'dark',
           accentColor: '#b374ff',
+          walletList: ['phantom'],
         },
       }}
     >
