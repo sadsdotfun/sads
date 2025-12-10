@@ -52,9 +52,37 @@
 }
 
 .market-info-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(179, 116, 255, 0.15);
+  position: relative;
+  overflow: hidden;
   border-radius: 16px;
+  background: #3d3c3d;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.market-info-card::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(179, 116, 255, 0.6);
+  filter: blur(50px);
+  left: -75px;
+  top: -75px;
+  z-index: 0;
+}
+
+.market-info-card::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #323132;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.market-info-card > * {
+  position: relative;
+  z-index: 2;
   padding: 1.5rem;
 }
 
@@ -71,10 +99,37 @@
 }
 
 .chart-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(179, 116, 255, 0.15);
-  border-radius: 16px;
+  position: relative;
   overflow: hidden;
+  border-radius: 16px;
+  background: #3d3c3d;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.chart-card::before {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background: rgba(179, 116, 255, 0.6);
+  filter: blur(50px);
+  left: -100px;
+  top: -75px;
+  z-index: 0;
+}
+
+.chart-card::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #323132;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.chart-card > * {
+  position: relative;
+  z-index: 2;
 }
 
 .prediction-chart-wrapper {
@@ -272,10 +327,33 @@
 }
 
 .details-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(179, 116, 255, 0.15);
+  position: relative;
+  overflow: hidden;
   border-radius: 16px;
+  background: #3d3c3d;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
+}
+
+.details-card::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(179, 116, 255, 0.6);
+  filter: blur(50px);
+  left: -75px;
+  top: -75px;
+  z-index: 0;
+}
+
+.details-card::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #323132;
+  border-radius: 14px;
+  z-index: -1;
 }
 
 .details-card h3 {
@@ -319,10 +397,33 @@
 }
 
 .trade-ticket {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(179, 116, 255, 0.2);
+  position: relative;
+  overflow: hidden;
   border-radius: 16px;
+  background: #3d3c3d;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
+}
+
+.trade-ticket::before {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 150px;
+  background: rgba(179, 116, 255, 0.6);
+  filter: blur(50px);
+  left: -100px;
+  top: -75px;
+  z-index: 0;
+}
+
+.trade-ticket::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #323132;
+  border-radius: 14px;
+  z-index: -1;
 }
 
 .trade-ticket h3 {
