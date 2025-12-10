@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { markets, categories, sortOptions, Market } from "@/lib/markets";
 import { useWallet } from "@/hooks/useWallet";
 import "./prediction-console.css";
@@ -174,6 +174,9 @@ export default function PredictionConsole() {
             <span className="console-subtitle">Autonomous Prediction Markets. Private by Default. Encrypted by Design.</span>
           </div>
           <span className="status-pill">Mainnet • Live odds</span>
+          <Link href="/" className="home-btn" data-testid="button-home">
+            Home
+          </Link>
         </div>
         <div className="header-right">
           <div className="anonymity-indicator">
