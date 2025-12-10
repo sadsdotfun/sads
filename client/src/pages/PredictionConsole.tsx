@@ -175,7 +175,7 @@ export default function PredictionConsole() {
           </div>
           <span className="status-pill">Mainnet • Live odds</span>
           <Link href="/" className="home-btn" data-testid="button-home">
-            Home
+            GO HOME
           </Link>
         </div>
         <div className="header-right">
