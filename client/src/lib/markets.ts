@@ -120,6 +120,116 @@ export const markets: Market[] = [
     noPrice: 0.81,
     source: "Polymarket",
     sourceUrl: "https://polymarket.com/search/all"
+  },
+  {
+    id: "trump-tariffs-china",
+    category: "Economy",
+    title: "Will Trump impose 60% tariffs on China in 2025?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 62,
+    yesPrice: 0.62,
+    noPrice: 0.38,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/tariffs"
+  },
+  {
+    id: "us-recession-2025",
+    category: "Economy",
+    title: "Will the US enter a recession in 2025?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 22,
+    yesPrice: 0.22,
+    noPrice: 0.78,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/recession"
+  },
+  {
+    id: "desantis-2028",
+    category: "Politics",
+    title: "Will Ron DeSantis run for President in 2028?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 48,
+    yesPrice: 0.48,
+    noPrice: 0.52,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/2028"
+  },
+  {
+    id: "trump-pardon-jan6",
+    category: "Politics",
+    title: "Trump pardons Jan 6 defendants?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 89,
+    yesPrice: 0.89,
+    noPrice: 0.11,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/pardon"
+  },
+  {
+    id: "sol-500-2025",
+    category: "Crypto",
+    title: "Will Solana hit $500 in 2025?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 18,
+    yesPrice: 0.18,
+    noPrice: 0.82,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/solana"
+  },
+  {
+    id: "btc-150k-2025",
+    category: "Crypto",
+    title: "Will Bitcoin hit $150,000 in 2025?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 31,
+    yesPrice: 0.31,
+    noPrice: 0.69,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/bitcoin"
+  },
+  {
+    id: "nintendo-switch-2",
+    category: "Gaming",
+    title: "Nintendo Switch 2 released in 2025?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 85,
+    yesPrice: 0.85,
+    noPrice: 0.15,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/nintendo"
+  },
+  {
+    id: "oscars-best-picture",
+    category: "Culture",
+    title: "2025 Oscar Best Picture Winner",
+    favoriteOutcome: "Anora",
+    impliedProbPercent: 42,
+    yesPrice: 0.42,
+    noPrice: 0.58,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/oscars"
+  },
+  {
+    id: "super-bowl-winner",
+    category: "Culture",
+    title: "Super Bowl LIX Winner",
+    favoriteOutcome: "Kansas City Chiefs",
+    impliedProbPercent: 28,
+    yesPrice: 0.28,
+    noPrice: 0.72,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/super-bowl"
+  },
+  {
+    id: "trump-truth-social",
+    category: "Social / Meme",
+    title: "Will Trump post on X in 2025?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 67,
+    yesPrice: 0.67,
+    noPrice: 0.33,
+    source: "Polymarket",
+    sourceUrl: "https://polymarket.com/search/trump"
   }
 ];
 
