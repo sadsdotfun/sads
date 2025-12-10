@@ -1,17 +1,166 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRoute, useLocation } from "wouter";
 import { markets } from "@/lib/markets";
-import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
+import { createChart, ColorType, CandlestickSeries, HistogramSeries } from "lightweight-charts";
 import "./trading-page.css";
 
-const categoryToSymbol: Record<string, string> = {
-  "Crypto": "BINANCE:BTCUSDT",
-  "Politics": "TVC:SPX",
-  "Economy": "TVC:DXY",
-  "Culture": "NASDAQ:META",
-  "Gaming": "NASDAQ:EA",
-  "Social / Meme": "BINANCE:DOGEUSDT",
+interface CandleData {
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
+const generatePredictionData = (baseValue: number, days: number): CandleData[] => {
+  const data: CandleData[] = [];
+  let value = baseValue - 0.15 + Math.random() * 0.1;
+  
+  for (let i = days; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    
+    const volatility = 0.03;
+    const trend = (baseValue - value) * 0.02;
+    const change = trend + (Math.random() - 0.5) * volatility;
+    
+    const open = value;
+    const close = Math.max(0.01, Math.min(0.99, value + change));
+    const high = Math.max(open, close) + Math.random() * volatility * 0.5;
+    const low = Math.min(open, close) - Math.random() * volatility * 0.5;
+    
+    data.push({
+      time: date.toISOString().split('T')[0],
+      open: Math.max(0.01, Math.min(0.99, open)),
+      high: Math.max(0.01, Math.min(0.99, high)),
+      low: Math.max(0.01, Math.min(0.99, low)),
+      close: Math.max(0.01, Math.min(0.99, close)),
+    });
+    
+    value = close;
+  }
+  return data;
 };
+
+function PredictionChart({ data, title }: { data: CandleData[]; title: string }) {
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
+
+  useEffect(() => {
+    if (!chartContainerRef.current) return;
+
+    const chart = createChart(chartContainerRef.current, {
+      layout: {
+        background: { type: ColorType.Solid, color: '#0a0a15' },
+        textColor: '#888888',
+      },
+      grid: {
+        vertLines: { color: 'rgba(179, 116, 255, 0.1)' },
+        horzLines: { color: 'rgba(179, 116, 255, 0.1)' },
+      },
+      crosshair: {
+        mode: 0,
+        vertLine: {
+          color: '#b374ff',
+          width: 1,
+          style: 2,
+          labelBackgroundColor: '#b374ff',
+        },
+        horzLine: {
+          color: '#b374ff',
+          width: 1,
+          style: 2,
+          labelBackgroundColor: '#b374ff',
+        },
+      },
+      timeScale: {
+        borderColor: 'rgba(179, 116, 255, 0.2)',
+        timeVisible: true,
+        secondsVisible: false,
+      },
+      rightPriceScale: {
+        borderColor: 'rgba(179, 116, 255, 0.2)',
+        scaleMargins: {
+          top: 0.1,
+          bottom: 0.1,
+        },
+      },
+      handleScroll: true,
+      handleScale: true,
+    });
+
+    const candlestickSeries = chart.addSeries(CandlestickSeries, {
+      upColor: '#22c55e',
+      downColor: '#ef4444',
+      borderUpColor: '#22c55e',
+      borderDownColor: '#ef4444',
+      wickUpColor: '#22c55e',
+      wickDownColor: '#ef4444',
+    });
+
+    candlestickSeries.setData(data);
+
+    const volumeSeries = chart.addSeries(HistogramSeries, {
+      color: '#b374ff',
+      priceFormat: {
+        type: 'volume',
+      },
+      priceScaleId: 'volume',
+    });
+
+    chart.priceScale('volume').applyOptions({
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+    });
+
+    const volumeData = data.map((d) => ({
+      time: d.time,
+      value: Math.floor(Math.random() * 1000000) + 100000,
+      color: d.close >= d.open ? 'rgba(34, 197, 94, 0.5)' : 'rgba(239, 68, 68, 0.5)',
+    }));
+
+    volumeSeries.setData(volumeData);
+
+    chart.timeScale().fitContent();
+
+    chartRef.current = chart;
+
+    const handleResize = () => {
+      if (chartContainerRef.current) {
+        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      chart.remove();
+    };
+  }, [data]);
+
+  return (
+    <div className="prediction-chart-wrapper">
+      <div className="chart-toolbar">
+        <div className="chart-symbol">
+          <span className="symbol-icon">📊</span>
+          <span className="symbol-name">{title}</span>
+          <span className="symbol-type">· Prediction Market</span>
+        </div>
+        <div className="chart-controls">
+          <span className="chart-interval">1D</span>
+          <span className="chart-type">Candles</span>
+        </div>
+      </div>
+      <div ref={chartContainerRef} className="chart-canvas" />
+      <div className="chart-footer">
+        <span className="tv-attribution">Powered by TradingView Lightweight Charts</span>
+      </div>
+    </div>
+  );
+}
 
 export default function TradingPage() {
   const [, params] = useRoute("/markets/:id");
@@ -20,6 +169,11 @@ export default function TradingPage() {
   const [amount, setAmount] = useState("");
 
   const market = markets.find(m => m.id === params?.id);
+
+  const chartData = useMemo(() => {
+    if (!market) return [];
+    return generatePredictionData(market.yesPrice, 90);
+  }, [market?.yesPrice, market?.id]);
 
   if (!market) {
     return (
@@ -46,8 +200,6 @@ export default function TradingPage() {
     });
   };
 
-  const chartSymbol = categoryToSymbol[market.category] || "BINANCE:BTCUSDT";
-
   return (
     <div className="trading-page" data-testid="trading-page">
       <header className="trading-header">
@@ -70,24 +222,7 @@ export default function TradingPage() {
           </div>
 
           <div className="chart-card">
-            <div className="tradingview-container">
-              <AdvancedRealTimeChart
-                symbol={chartSymbol}
-                theme="dark"
-                autosize
-                interval="D"
-                timezone="Etc/UTC"
-                style="1"
-                locale="en"
-                toolbar_bg="#0a0a15"
-                enable_publishing={false}
-                hide_top_toolbar={false}
-                hide_legend={false}
-                save_image={false}
-                container_id="tradingview_chart"
-              />
-            </div>
-            <p className="chart-caption">Live market data from TradingView. Related asset shown for reference.</p>
+            <PredictionChart data={chartData} title={market.title} />
           </div>
 
           <div className="details-card">
