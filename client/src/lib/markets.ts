@@ -74,16 +74,16 @@ export const markets: Market[] = [
     polymarketSlug: "what-price-will-bitcoin-hit-in-2025"
   },
   {
-    id: "btc-dec15-range",
+    id: "btc-dip-80k",
     category: "Crypto",
-    title: "Bitcoin price on December 15, 2025",
-    favoriteOutcome: "$92k–$94k range",
-    impliedProbPercent: 16,
-    yesPrice: 0.18,
-    noPrice: 0.86,
+    title: "Will Bitcoin dip to $80k by Dec 31?",
+    favoriteOutcome: "Dips below $80,000",
+    impliedProbPercent: 40,
+    yesPrice: 0.40,
+    noPrice: 0.60,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/bitcoin-price-on-december-15",
-    polymarketSlug: "bitcoin-price-on-december-15"
+    sourceUrl: "https://polymarket.com/event/what-price-will-bitcoin-hit-in-2025",
+    polymarketSlug: "what-price-will-bitcoin-hit-in-2025"
   },
   {
     id: "eth-5000-2025",
@@ -122,16 +122,16 @@ export const markets: Market[] = [
     polymarketSlug: "will-gta-6-cost-100"
   },
   {
-    id: "elon-tweets-week",
+    id: "elon-tweets-dec",
     category: "Social / Meme",
-    title: "Elon Musk # tweets (Dec 5–12, 2025)",
-    favoriteOutcome: "440–459 tweets",
-    impliedProbPercent: 19,
-    yesPrice: 0.19,
-    noPrice: 0.81,
+    title: "Elon Musk tweets in December 2025",
+    favoriteOutcome: "1400+ tweets",
+    impliedProbPercent: 54,
+    yesPrice: 0.54,
+    noPrice: 0.46,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/elon-musk-of-tweets-december-5-december-12",
-    polymarketSlug: "elon-musk-of-tweets-december-5-december-12"
+    sourceUrl: "https://polymarket.com/event/elon-musk-of-tweets-december-2025",
+    polymarketSlug: "elon-musk-of-tweets-december-2025"
   },
   {
     id: "trump-tariffs-china",
@@ -158,28 +158,28 @@ export const markets: Market[] = [
     polymarketSlug: "us-recession-in-2025"
   },
   {
-    id: "desantis-2028",
+    id: "presidential-winner-2028",
     category: "Politics",
-    title: "Will Ron DeSantis run for President in 2028?",
-    favoriteOutcome: "Yes",
-    impliedProbPercent: 48,
-    yesPrice: 0.48,
-    noPrice: 0.52,
+    title: "2028 Presidential Election Winner",
+    favoriteOutcome: "J.D. Vance",
+    impliedProbPercent: 30,
+    yesPrice: 0.30,
+    noPrice: 0.70,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/will-ron-desantis-run-for-president-in-2028",
-    polymarketSlug: "will-ron-desantis-run-for-president-in-2028"
+    sourceUrl: "https://polymarket.com/event/presidential-election-winner-2028",
+    polymarketSlug: "presidential-election-winner-2028"
   },
   {
-    id: "trump-pardon-jan6",
+    id: "trump-out-2025",
     category: "Politics",
-    title: "Trump pardons Jan 6 defendants?",
-    favoriteOutcome: "Yes",
-    impliedProbPercent: 89,
-    yesPrice: 0.89,
-    noPrice: 0.11,
+    title: "Trump out as President in 2025?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 1,
+    yesPrice: 0.01,
+    noPrice: 0.99,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/trump-pardons-jan-6-defendants",
-    polymarketSlug: "trump-pardons-jan-6-defendants"
+    sourceUrl: "https://polymarket.com/event/trump-out-as-president-in-2025",
+    polymarketSlug: "trump-out-as-president-in-2025"
   },
   {
     id: "sol-ath-2025",
@@ -206,16 +206,16 @@ export const markets: Market[] = [
     polymarketSlug: "when-will-bitcoin-hit-150k"
   },
   {
-    id: "nintendo-switch-2",
-    category: "Gaming",
-    title: "Nintendo Switch 2 released in 2025?",
-    favoriteOutcome: "Yes",
-    impliedProbPercent: 85,
-    yesPrice: 0.85,
-    noPrice: 0.15,
+    id: "trump-say-polymarket",
+    category: "Social / Meme",
+    title: "Will Trump say Polymarket by Dec 31?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 6,
+    yesPrice: 0.06,
+    noPrice: 0.94,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/nintendo-switch-2-2025",
-    polymarketSlug: "nintendo-switch-2-2025"
+    sourceUrl: "https://polymarket.com/event/will-trump-say-polymarket-by-december-31",
+    polymarketSlug: "will-trump-say-polymarket-by-december-31"
   },
   {
     id: "oscars-best-picture",
@@ -232,26 +232,26 @@ export const markets: Market[] = [
   {
     id: "super-bowl-winner",
     category: "Culture",
-    title: "Super Bowl LIX Winner",
-    favoriteOutcome: "Kansas City Chiefs",
+    title: "Super Bowl LX Champion 2026",
+    favoriteOutcome: "Detroit Lions",
     impliedProbPercent: 28,
     yesPrice: 0.28,
     noPrice: 0.72,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/super-bowl-lix-champion",
-    polymarketSlug: "super-bowl-lix-champion"
+    sourceUrl: "https://polymarket.com/event/super-bowl-champion-2026-731",
+    polymarketSlug: "super-bowl-champion-2026-731"
   },
   {
-    id: "trump-truth-social",
-    category: "Social / Meme",
-    title: "Will Trump post on X in 2025?",
-    favoriteOutcome: "Yes",
-    impliedProbPercent: 67,
-    yesPrice: 0.67,
-    noPrice: 0.33,
+    id: "trump-meet-maduro",
+    category: "Politics",
+    title: "Will Trump talk to Maduro by Dec 31?",
+    favoriteOutcome: "No",
+    impliedProbPercent: 40,
+    yesPrice: 0.40,
+    noPrice: 0.60,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/will-trump-post-on-x-in-2025",
-    polymarketSlug: "will-trump-post-on-x-in-2025"
+    sourceUrl: "https://polymarket.com/event/trump-talk-to-maduro-by-december-31",
+    polymarketSlug: "trump-talk-to-maduro-by-december-31"
   }
 ];
 

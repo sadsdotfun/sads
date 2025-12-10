@@ -15,6 +15,7 @@ function Router() {
       <Route path="/" component={Nexus} />
       <Route path="/terminal" component={PredictionTerminal} />
       <Route path="/app" component={PredictionConsole} />
+      <Route path="/console" component={PredictionConsole} />
       <Route path="/markets/:id" component={TradingPage} />
       <Route component={NotFound} />
     </Switch>
