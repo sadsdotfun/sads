@@ -53,45 +53,16 @@
 
 .market-info-card {
   position: relative;
-  background: linear-gradient(135deg, #1e1e24 10%, #050505 60%);
-  animation: gradient-shift 5s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.market-info-card::before,
-.market-info-card::after {
-  --size: 5px;
-  content: "";
-  position: absolute;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: calc(100% + var(--size));
-  height: calc(100% + var(--size));
-  background: radial-gradient(circle at 0 0, hsl(27deg 93% 60%), transparent),
-    radial-gradient(circle at 100% 0, #00a6ff, transparent),
-    radial-gradient(circle at 0 100%, #ff0056, transparent),
-    radial-gradient(circle at 100% 100%, #6500ff, transparent);
   border-radius: 16px;
-}
-
-.market-info-card::after {
-  --size: 2px;
-  z-index: -1;
-}
-
-.market-info-card::before {
-  --size: 10px;
-  z-index: -2;
-  filter: blur(2vmin);
-  animation: blur-animation 3s ease-in-out alternate infinite;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(179, 116, 255, 0.3) 0%, rgba(179, 116, 255, 0.1) 50%, rgba(179, 116, 255, 0.3) 100%);
+  box-shadow: 0 0 15px rgba(179, 116, 255, 0.15);
 }
 
 .market-info-card-inner {
   background: #000;
   border-radius: 14px;
   padding: 1.5rem;
-  position: relative;
-  z-index: 1;
 }
 
 .trading-title {
@@ -108,45 +79,16 @@
 
 .chart-card {
   position: relative;
-  background: linear-gradient(135deg, #1e1e24 10%, #050505 60%);
-  animation: gradient-shift 5s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.chart-card::before,
-.chart-card::after {
-  --size: 5px;
-  content: "";
-  position: absolute;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: calc(100% + var(--size));
-  height: calc(100% + var(--size));
-  background: radial-gradient(circle at 0 0, hsl(27deg 93% 60%), transparent),
-    radial-gradient(circle at 100% 0, #00a6ff, transparent),
-    radial-gradient(circle at 0 100%, #ff0056, transparent),
-    radial-gradient(circle at 100% 100%, #6500ff, transparent);
   border-radius: 16px;
-}
-
-.chart-card::after {
-  --size: 2px;
-  z-index: -1;
-}
-
-.chart-card::before {
-  --size: 10px;
-  z-index: -2;
-  filter: blur(2vmin);
-  animation: blur-animation 3s ease-in-out alternate infinite;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(179, 116, 255, 0.3) 0%, rgba(179, 116, 255, 0.1) 50%, rgba(179, 116, 255, 0.3) 100%);
+  box-shadow: 0 0 15px rgba(179, 116, 255, 0.15);
 }
 
 .chart-card-inner {
   background: #000;
   border-radius: 14px;
   overflow: hidden;
-  position: relative;
-  z-index: 1;
 }
 
 .prediction-chart-wrapper {
@@ -345,45 +287,16 @@
 
 .details-card {
   position: relative;
-  background: linear-gradient(135deg, #1e1e24 10%, #050505 60%);
-  animation: gradient-shift 5s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.details-card::before,
-.details-card::after {
-  --size: 5px;
-  content: "";
-  position: absolute;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: calc(100% + var(--size));
-  height: calc(100% + var(--size));
-  background: radial-gradient(circle at 0 0, hsl(27deg 93% 60%), transparent),
-    radial-gradient(circle at 100% 0, #00a6ff, transparent),
-    radial-gradient(circle at 0 100%, #ff0056, transparent),
-    radial-gradient(circle at 100% 100%, #6500ff, transparent);
   border-radius: 16px;
-}
-
-.details-card::after {
-  --size: 2px;
-  z-index: -1;
-}
-
-.details-card::before {
-  --size: 10px;
-  z-index: -2;
-  filter: blur(2vmin);
-  animation: blur-animation 3s ease-in-out alternate infinite;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(179, 116, 255, 0.3) 0%, rgba(179, 116, 255, 0.1) 50%, rgba(179, 116, 255, 0.3) 100%);
+  box-shadow: 0 0 15px rgba(179, 116, 255, 0.15);
 }
 
 .details-card-inner {
   background: #000;
   border-radius: 14px;
   padding: 1.5rem;
-  position: relative;
-  z-index: 1;
 }
 
 .details-card h3 {
@@ -428,64 +341,16 @@
 
 .trade-ticket {
   position: relative;
-  background: linear-gradient(135deg, #1e1e24 10%, #050505 60%);
-  animation: gradient-shift 5s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.trade-ticket::before,
-.trade-ticket::after {
-  --size: 5px;
-  content: "";
-  position: absolute;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: calc(100% + var(--size));
-  height: calc(100% + var(--size));
-  background: radial-gradient(circle at 0 0, hsl(27deg 93% 60%), transparent),
-    radial-gradient(circle at 100% 0, #00a6ff, transparent),
-    radial-gradient(circle at 0 100%, #ff0056, transparent),
-    radial-gradient(circle at 100% 100%, #6500ff, transparent);
   border-radius: 16px;
-}
-
-.trade-ticket::after {
-  --size: 2px;
-  z-index: -1;
-}
-
-.trade-ticket::before {
-  --size: 10px;
-  z-index: -2;
-  filter: blur(2vmin);
-  animation: blur-animation 3s ease-in-out alternate infinite;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(179, 116, 255, 0.3) 0%, rgba(179, 116, 255, 0.1) 50%, rgba(179, 116, 255, 0.3) 100%);
+  box-shadow: 0 0 15px rgba(179, 116, 255, 0.15);
 }
 
 .trade-ticket-inner {
   background: #000;
   border-radius: 14px;
   padding: 1.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes blur-animation {
-  to {
-    filter: blur(3vmin);
-    transform: scale(1.05);
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 .trade-ticket h3 {
