@@ -29,13 +29,13 @@ export const markets: Market[] = [
     id: "gop-nominee-2028",
     category: "Politics",
     title: "Republican Presidential Nominee 2028",
-    favoriteOutcome: "J.D. Vance",
+    favoriteOutcome: "JD Vance",
     impliedProbPercent: 55,
     yesPrice: 0.55,
     noPrice: 0.45,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/2028-republican-presidential-nomination",
-    polymarketSlug: "2028-republican-presidential-nomination"
+    sourceUrl: "https://polymarket.com/event/republican-presidential-nominee-2028",
+    polymarketSlug: "republican-presidential-nominee-2028"
   },
   {
     id: "dem-nominee-2028",
@@ -58,8 +58,8 @@ export const markets: Market[] = [
     yesPrice: 0.69,
     noPrice: 0.31,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/times-2025-person-of-the-year",
-    polymarketSlug: "times-2025-person-of-the-year"
+    sourceUrl: "https://polymarket.com/event/time-2025-person-of-the-year",
+    polymarketSlug: "time-2025-person-of-the-year"
   },
   {
     id: "btc-hit-95k-2025",
