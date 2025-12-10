@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import { PrivyProvider, usePrivy, useWallets } from '@privy-io/react-auth';
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect, lazy, Suspense } from 'react';
 
 interface WalletContextType {
   ready: boolean;
@@ -31,35 +30,63 @@ export function useWalletContext() {
 
 const PRIVY_APP_ID = import.meta.env.VITE_PRIVY_APP_ID;
 
-function WalletContextProvider({ children }: { children: React.ReactNode }) {
-  const { ready, authenticated, login, logout, user } = usePrivy();
-  const { wallets } = useWallets();
-  
-  const solanaWallet = wallets.find(w => w.walletClientType === 'phantom');
-  const address = solanaWallet?.address || null;
-  
-  const shortAddress = address 
-    ? `${address.slice(0, 4)}...${address.slice(-4)}`
-    : null;
+function PhantomWalletProvider({ children }: { children: React.ReactNode }) {
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState<string | null>(null);
+  const [wallet, setWallet] = useState<any>(null);
+
+  useEffect(() => {
+    const checkPhantom = async () => {
+      if (typeof window !== 'undefined' && (window as any).phantom?.solana) {
+        const phantom = (window as any).phantom.solana;
+        if (phantom.isConnected && phantom.publicKey) {
+          setConnected(true);
+          setAddress(phantom.publicKey.toString());
+          setWallet(phantom);
+        }
+      }
+    };
+    checkPhantom();
+  }, []);
 
   const connect = useCallback(async () => {
     try {
-      await login();
+      if (typeof window === 'undefined') {
+        alert('Please use a browser with Phantom wallet installed.');
+        return;
+      }
+      
+      const phantom = (window as any).phantom?.solana;
+      
+      if (!phantom) {
+        window.open('https://phantom.app/', '_blank');
+        return;
+      }
+      
+      const response = await phantom.connect();
+      setConnected(true);
+      setAddress(response.publicKey.toString());
+      setWallet(phantom);
     } catch (error) {
-      console.error('Failed to connect wallet:', error);
+      console.error('Failed to connect Phantom wallet:', error);
     }
-  }, [login]);
+  }, []);
 
   const disconnect = useCallback(async () => {
     try {
-      await logout();
+      if (wallet) {
+        await wallet.disconnect();
+      }
+      setConnected(false);
+      setAddress(null);
+      setWallet(null);
     } catch (error) {
       console.error('Failed to disconnect wallet:', error);
     }
-  }, [logout]);
+  }, [wallet]);
 
   const placeBet = useCallback(async (amount: number, marketId: string, side: 'yes' | 'no') => {
-    if (!authenticated || !solanaWallet) {
+    if (!connected || !wallet) {
       return { success: false, error: 'Wallet not connected' };
     }
     
@@ -72,55 +99,23 @@ function WalletContextProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       return { success: false, error: error.message || 'Transaction failed' };
     }
-  }, [authenticated, solanaWallet]);
+  }, [connected, wallet]);
 
-  const value: WalletContextType = useMemo(() => ({
-    ready,
-    authenticated,
-    address,
-    shortAddress,
-    wallet: solanaWallet,
-    connect,
-    disconnect,
-    placeBet,
-    privyAvailable: true,
-  }), [ready, authenticated, address, shortAddress, solanaWallet, connect, disconnect, placeBet]);
-
-  return (
-    <WalletContext.Provider value={value}>
-      {children}
-    </WalletContext.Provider>
-  );
-}
-
-function MockWalletProvider({ children }: { children: React.ReactNode }) {
-  const [mockConnected, setMockConnected] = useState(false);
+  const shortAddress = address 
+    ? `${address.slice(0, 4)}...${address.slice(-4)}`
+    : null;
 
   const value: WalletContextType = useMemo(() => ({
     ready: true,
-    authenticated: mockConnected,
-    address: mockConnected ? 'DemoWallet123456789abcdef' : null,
-    shortAddress: mockConnected ? 'Demo...cdef' : null,
-    wallet: null,
-    connect: async () => {
-      alert('To enable real wallet connection, add your Privy App ID to environment variables (VITE_PRIVY_APP_ID).\n\nFor demo purposes, you are now connected with a mock wallet.');
-      setMockConnected(true);
-    },
-    disconnect: async () => {
-      setMockConnected(false);
-    },
-    placeBet: async (amount: number, marketId: string, side: 'yes' | 'no') => {
-      if (!mockConnected) {
-        return { success: false, error: 'Wallet not connected' };
-      }
-      console.log(`[DEMO] Placing bet: ${amount} USDC on ${side} for market ${marketId}`);
-      return { 
-        success: true, 
-        txId: 'demo_' + Math.random().toString(36).substring(7)
-      };
-    },
+    authenticated: connected,
+    address,
+    shortAddress,
+    wallet,
+    connect,
+    disconnect,
+    placeBet,
     privyAvailable: false,
-  }), [mockConnected]);
+  }), [connected, address, shortAddress, wallet, connect, disconnect, placeBet]);
 
   return (
     <WalletContext.Provider value={value}>
@@ -130,23 +125,5 @@ function MockWalletProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function PrivyWrapper({ children }: { children: React.ReactNode }) {
-  if (!PRIVY_APP_ID) {
-    return <MockWalletProvider>{children}</MockWalletProvider>;
-  }
-
-  return (
-    <PrivyProvider
-      appId={PRIVY_APP_ID}
-      config={{
-        loginMethods: ['wallet'],
-        appearance: {
-          theme: 'dark',
-          accentColor: '#b374ff',
-          walletList: ['phantom'],
-        },
-      }}
-    >
-      <WalletContextProvider>{children}</WalletContextProvider>
-    </PrivyProvider>
-  );
+  return <PhantomWalletProvider>{children}</PhantomWalletProvider>;
 }
