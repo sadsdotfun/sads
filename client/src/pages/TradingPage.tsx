@@ -202,16 +202,34 @@ export default function TradingPage() {
             const slugData = await slugResponse.json();
             
             if (slugData.markets && slugData.markets.length > 0) {
-              // Try to match by outcome title or pick first market
-              const matchedMarket = slugData.markets.find((m: any) => 
-                market.favoriteOutcome?.toLowerCase().includes(m.groupItemTitle?.toLowerCase()) ||
-                m.question?.toLowerCase().includes(market.title.toLowerCase())
-              ) || slugData.markets[0];
+              // Extract price/percentage targets from favoriteOutcome
+              const favoriteOutcome = market.favoriteOutcome?.toLowerCase() || '';
+              const priceMatch = favoriteOutcome.match(/\$?([\d,]+)/);
+              const priceTarget = priceMatch ? priceMatch[1].replace(',', '') : null;
+              
+              // Also extract key words
+              const keywords = favoriteOutcome.split(/[\s]+/).filter((w: string) => w.length > 2);
+              
+              const matchedMarket = slugData.markets.find((m: any) => {
+                const groupTitle = (m.groupItemTitle || '').toLowerCase().replace(',', '');
+                const question = (m.question || '').toLowerCase();
+                
+                // Try to match by price target first
+                if (priceTarget && groupTitle.includes(priceTarget)) {
+                  return true;
+                }
+                
+                // Then try keyword matching for non-price outcomes (like "25 bps")
+                return keywords.some((keyword: string) => 
+                  groupTitle.includes(keyword) || question.includes(keyword)
+                );
+              }) || slugData.markets[0];
               
               const clobIds = matchedMarket?.clobTokenIds;
               
               if (clobIds && Array.isArray(clobIds) && clobIds.length > 0) {
                 tokenId = clobIds[0];
+                console.log('Matched market:', matchedMarket.groupItemTitle, 'Token:', tokenId);
               }
             }
           }
