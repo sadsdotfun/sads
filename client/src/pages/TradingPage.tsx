@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useRoute, useLocation } from "wouter";
 import { markets } from "@/lib/markets";
+import { useWallet } from "@/hooks/useWallet";
 import { createChart, ColorType, CandlestickSeries, HistogramSeries } from "lightweight-charts";
 import "./trading-page.css";
 
@@ -167,6 +168,8 @@ export default function TradingPage() {
   const [, setLocation] = useLocation();
   const [selectedSide, setSelectedSide] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState("");
+  const { authenticated, shortAddress, connect, disconnect, placeBet } = useWallet();
+  const [isPlacingBet, setIsPlacingBet] = useState(false);
 
   const market = markets.find(m => m.id === params?.id);
 
@@ -302,9 +305,42 @@ export default function TradingPage() {
               </div>
             </div>
 
-            <button className="submit-trade-btn" data-testid="button-submit-trade">
-              Connect wallet to trade
-            </button>
+            {authenticated ? (
+              <button 
+                className="submit-trade-btn connected" 
+                onClick={async () => {
+                  if (amountNum <= 0) return;
+                  setIsPlacingBet(true);
+                  const result = await placeBet(amountNum, market.id, selectedSide);
+                  setIsPlacingBet(false);
+                  if (result.success) {
+                    setAmount("");
+                    alert(`Trade placed! TX: ${result.txId}`);
+                  } else {
+                    alert(`Trade failed: ${result.error}`);
+                  }
+                }}
+                disabled={isPlacingBet || amountNum <= 0}
+                data-testid="button-submit-trade"
+              >
+                {isPlacingBet ? "Placing trade..." : `Trade ${selectedSide.toUpperCase()}`}
+              </button>
+            ) : (
+              <button 
+                className="submit-trade-btn" 
+                onClick={connect}
+                data-testid="button-connect-trade"
+              >
+                Connect Phantom to trade
+              </button>
+            )}
+
+            {authenticated && (
+              <div className="wallet-status">
+                <span className="wallet-address">{shortAddress}</span>
+                <button className="disconnect-btn" onClick={disconnect} data-testid="button-disconnect-trade">Disconnect</button>
+              </div>
+            )}
 
             <p className="gas-note">Gas & fees shown before confirm.</p>
 

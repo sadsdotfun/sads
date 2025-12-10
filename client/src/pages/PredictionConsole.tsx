@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
 import { markets, categories, sortOptions, Market } from "@/lib/markets";
+import { useWallet } from "@/hooks/useWallet";
 import "./prediction-console.css";
 
 function MarketCard({ market, onClick }: { market: Market; onClick: () => void }) {
@@ -76,6 +77,7 @@ export default function PredictionConsole() {
   const [sortBy, setSortBy] = useState("active");
   const [, setLocation] = useLocation();
   const [privateCount, setPrivateCount] = useState(84219);
+  const { authenticated, shortAddress, connect, disconnect } = useWallet();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -124,10 +126,21 @@ export default function PredictionConsole() {
             <span className="privacy-text">Private Mode: On</span>
           </div>
           <div className="wallet-container">
-            <button className="wallet-btn" data-testid="button-connect-wallet">
-              Connect Wallet
-            </button>
-            <span className="wallet-note">Zero tracking. Zero profiling.</span>
+            {authenticated ? (
+              <>
+                <button className="wallet-btn connected" onClick={disconnect} data-testid="button-disconnect-wallet">
+                  {shortAddress}
+                </button>
+                <span className="wallet-note">Phantom Connected</span>
+              </>
+            ) : (
+              <>
+                <button className="wallet-btn" onClick={connect} data-testid="button-connect-wallet">
+                  Connect Phantom
+                </button>
+                <span className="wallet-note">Zero tracking. Zero profiling.</span>
+              </>
+            )}
           </div>
         </div>
       </header>

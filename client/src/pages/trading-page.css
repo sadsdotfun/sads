@@ -488,9 +488,51 @@
   margin-bottom: 0.5rem;
 }
 
-.submit-trade-btn:hover {
+.submit-trade-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(179, 116, 255, 0.4);
+}
+
+.submit-trade-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submit-trade-btn.connected {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.wallet-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.wallet-address {
+  font-size: 0.7rem;
+  color: #22c55e;
+  font-family: var(--font-secondary);
+}
+
+.disconnect-btn {
+  padding: 0.3rem 0.6rem;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  font-size: 0.65rem;
+  font-family: var(--font-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.disconnect-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
 }
 
 .gas-note {
