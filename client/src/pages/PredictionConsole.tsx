@@ -61,7 +61,7 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
           </div>
           <div className="market-footer">
             <div className="footer-left">
-              <span className="private-settlement">Private Settlement</span>
+              <span className="private-settlement">Autonomous Settlement</span>
               <span className="payout-text">Payout: 1.00 USDC per verified signal</span>
             </div>
             <button className="trade-btn" data-testid={`button-trade-${market.id}`}>Trade</button>
@@ -76,12 +76,12 @@ export default function PredictionConsole() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState("active");
   const [, setLocation] = useLocation();
-  const [privateCount, setPrivateCount] = useState(84219);
+  const [autonomousCount, setAutonomousCount] = useState(84219);
   const { authenticated, shortAddress, connect, disconnect } = useWallet();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPrivateCount(prev => prev + Math.floor(Math.random() * 5));
+      setAutonomousCount(prev => prev + Math.floor(Math.random() * 5));
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -171,7 +171,7 @@ export default function PredictionConsole() {
           <img src="/logo.png" alt="SADS" className="console-logo" />
           <div className="header-text">
             <span className="console-title">SADS Prediction Console</span>
-            <span className="console-subtitle">Autonomous Prediction Markets. Private by Default. Encrypted by Design.</span>
+            <span className="console-subtitle">Autonomous Prediction Markets. Autonomous by Default. Encrypted by Design.</span>
           </div>
           <span className="status-pill">Mainnet • Live odds</span>
           <Link href="/" className="home-btn" data-testid="button-home">
@@ -181,7 +181,7 @@ export default function PredictionConsole() {
         <div className="header-right">
           <div className="anonymity-indicator">
             <span className="privacy-dot"></span>
-            <span className="privacy-text">Private Mode: On</span>
+            <span className="privacy-text">Autonomous Mode: On</span>
           </div>
           <div className="wallet-container">
             {authenticated ? (
@@ -208,7 +208,7 @@ export default function PredictionConsole() {
           <div className="marquee-content">
             <span>On SADS, your predictions exist without a trace. Machine learning drives signals. Zero user profiling.</span>
             <span className="marquee-divider">◆</span>
-            <span>Private predictions executed in the last 24h: <strong>{privateCount.toLocaleString()}</strong></span>
+            <span>Autonomous predictions executed in the last 24h: <strong>{autonomousCount.toLocaleString()}</strong></span>
             <span className="marquee-divider">◆</span>
             <span>Wallet routing obfuscation active. No signatures tied to identity.</span>
             <span className="marquee-divider">◆</span>
@@ -216,7 +216,7 @@ export default function PredictionConsole() {
           <div className="marquee-content">
             <span>On SADS, your predictions exist without a trace. Machine learning drives signals. Zero user profiling.</span>
             <span className="marquee-divider">◆</span>
-            <span>Private predictions executed in the last 24h: <strong>{privateCount.toLocaleString()}</strong></span>
+            <span>Autonomous predictions executed in the last 24h: <strong>{autonomousCount.toLocaleString()}</strong></span>
             <span className="marquee-divider">◆</span>
             <span>Wallet routing obfuscation active. No signatures tied to identity.</span>
             <span className="marquee-divider">◆</span>
