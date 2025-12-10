@@ -2,7 +2,7 @@
 
 A quantum-themed prediction market interface that displays live Polymarket data with TradingView-style candlestick charts. Built with privacy-focused design and Nintendo-inspired 3D UI elements.
 
-## 🚀 Live Features
+##  Live Features
 
 - **20 Live Prediction Markets** - Real-time data from Polymarket's CLOB API
 - **TradingView Candlestick Charts** - Professional trading charts using lightweight-charts library
@@ -10,7 +10,7 @@ A quantum-themed prediction market interface that displays live Polymarket data 
 - **Phantom Wallet Integration** - Connect Solana wallet for trading (coming soon)
 - **Settled Market Detection** - Markets at 0%/100% display as settled with terminal popup
 
-## 🏗️ Technical Architecture
+##  Technical Architecture
 
 ### Frontend Stack
 - **React 18** with TypeScript
@@ -71,7 +71,7 @@ The app proxies requests to Polymarket's Central Limit Order Book API to fetch:
 └─────────────────┘     └──────────────┘
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 ├── client/
@@ -121,7 +121,7 @@ Trading interface with:
 - YES/NO trading buttons
 - Live price polling
 
-## 🎨 Design System
+##  Design System
 
 ### Colors
 - Primary Purple: `#b374ff`
@@ -134,8 +134,8 @@ Cards use CSS transforms with mouse tracking for depth:
 - `transform: perspective(1000px) rotateX() rotateY()`
 - Tracker elements for gradient glow effects
 - Pulse animation for high-conviction markets
-
-## 🚀 Getting Started
+- 
+##  Getting Started
 
 ```bash
 # Install dependencies
@@ -148,7 +148,7 @@ npm run dev
 npm run build
 ```
 
-## 📊 Market Categories
+##  Market Categories
 
 - **Politics** - Elections, government events
 - **Crypto** - Bitcoin, Solana price predictions
@@ -156,14 +156,14 @@ npm run build
 - **Economics** - Recession, Federal Reserve
 - **Sports** - Super Bowl, championships
 
-## 🔐 Privacy Features
+##  Privacy Features
 
 - No custodial accounts required
 - Wallet unlinking enforced
 - Autonomous settlement system
 - Level 5 privacy shield indicators
 
-## 📈 Future Roadmap
+##  Future Roadmap
 
 - [ ] Solana USDC betting integration
 - [ ] Historical price data from Polymarket
