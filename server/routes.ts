@@ -94,13 +94,15 @@ export async function registerRoutes(
   app.get("/api/polymarket/prices/:tokenId", async (req, res) => {
     try {
       const { tokenId } = req.params;
-      const interval = (req.query.interval as string) || "30d";
+      const interval = (req.query.interval as string) || "max";
       
       const response = await fetch(
-        `${POLYMARKET_CLOB_URL}/prices-history?token_id=${tokenId}&interval=${interval}`
+        `${POLYMARKET_CLOB_URL}/prices-history?market=${tokenId}&interval=${interval}&fidelity=60`
       );
       
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Polymarket API response:", response.status, errorText);
         throw new Error(`Polymarket API error: ${response.status}`);
       }
       
@@ -208,13 +210,26 @@ export async function registerRoutes(
         const event = data[0];
         const markets = event.markets || [];
         
-        const marketData = markets.map((m: any) => ({
-          question: m.question,
-          outcome: m.outcome,
-          outcomePrices: m.outcomePrices,
-          clobTokenIds: m.clobTokenIds,
-          groupItemTitle: m.groupItemTitle,
-        }));
+        const marketData = markets.map((m: any) => {
+          let clobTokenIds = m.clobTokenIds;
+          let outcomePrices = m.outcomePrices;
+          
+          // Parse stringified JSON if needed
+          if (typeof clobTokenIds === 'string') {
+            try { clobTokenIds = JSON.parse(clobTokenIds); } catch {}
+          }
+          if (typeof outcomePrices === 'string') {
+            try { outcomePrices = JSON.parse(outcomePrices); } catch {}
+          }
+          
+          return {
+            question: m.question,
+            outcome: m.outcome,
+            outcomePrices,
+            clobTokenIds,
+            groupItemTitle: m.groupItemTitle,
+          };
+        });
         
         res.json({ 
           event: {

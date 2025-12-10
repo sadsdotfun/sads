@@ -238,7 +238,7 @@ export default function TradingPage() {
         
         // Fetch price history if we found a token
         if (tokenId) {
-          const priceResponse = await fetch(`/api/polymarket/prices/${tokenId}?interval=30d`);
+          const priceResponse = await fetch(`/api/polymarket/prices/${tokenId}?interval=max`);
           
           if (!priceResponse.ok) throw new Error('Failed to fetch prices');
           
