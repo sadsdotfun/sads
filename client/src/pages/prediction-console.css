@@ -165,16 +165,24 @@
   padding: 0.6rem 0;
   margin-bottom: 1.5rem;
   overflow: hidden;
+  width: 100%;
+}
+
+.marquee-track {
+  display: flex;
+  width: fit-content;
+  animation: marquee 40s linear infinite;
 }
 
 .marquee-content {
   display: flex;
   gap: 2rem;
-  animation: marquee 30s linear infinite;
   white-space: nowrap;
   font-size: 0.7rem;
   color: #888;
   letter-spacing: 0.03em;
+  padding-right: 2rem;
+  flex-shrink: 0;
 }
 
 .marquee-content strong {

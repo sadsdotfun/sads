@@ -201,13 +201,23 @@ export default function PredictionConsole() {
       </header>
 
       <div className="privacy-marquee">
-        <div className="marquee-content">
-          <span>On SADS, your predictions exist without a trace. Machine learning drives signals. Zero user profiling.</span>
-          <span className="marquee-divider">◆</span>
-          <span>Private predictions executed in the last 24h: <strong>{privateCount.toLocaleString()}</strong></span>
-          <span className="marquee-divider">◆</span>
-          <span>Wallet routing obfuscation active. No signatures tied to identity.</span>
-          <span className="marquee-divider">◆</span>
+        <div className="marquee-track">
+          <div className="marquee-content">
+            <span>On SADS, your predictions exist without a trace. Machine learning drives signals. Zero user profiling.</span>
+            <span className="marquee-divider">◆</span>
+            <span>Private predictions executed in the last 24h: <strong>{privateCount.toLocaleString()}</strong></span>
+            <span className="marquee-divider">◆</span>
+            <span>Wallet routing obfuscation active. No signatures tied to identity.</span>
+            <span className="marquee-divider">◆</span>
+          </div>
+          <div className="marquee-content">
+            <span>On SADS, your predictions exist without a trace. Machine learning drives signals. Zero user profiling.</span>
+            <span className="marquee-divider">◆</span>
+            <span>Private predictions executed in the last 24h: <strong>{privateCount.toLocaleString()}</strong></span>
+            <span className="marquee-divider">◆</span>
+            <span>Wallet routing obfuscation active. No signatures tied to identity.</span>
+            <span className="marquee-divider">◆</span>
+          </div>
         </div>
       </div>
 
