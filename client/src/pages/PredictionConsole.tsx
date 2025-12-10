@@ -1,11 +1,22 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { markets, categories, sortOptions, Market } from "@/lib/markets";
 import { useWallet } from "@/hooks/useWallet";
 import "./prediction-console.css";
 
-function MarketCard({ market, onClick }: { market: Market; onClick: () => void }) {
-  const isHighConviction = market.impliedProbPercent >= 70 || market.impliedProbPercent <= 10;
+interface LivePriceData {
+  yesPrice: number;
+  noPrice: number;
+  impliedProbPercent: number;
+  isLive: boolean;
+}
+
+function MarketCard({ market, liveData, onClick }: { market: Market; liveData?: LivePriceData; onClick: () => void }) {
+  const yesPrice = liveData?.yesPrice ?? market.yesPrice;
+  const noPrice = liveData?.noPrice ?? market.noPrice;
+  const impliedProb = liveData?.impliedProbPercent ?? market.impliedProbPercent;
+  const isLive = liveData?.isLive ?? false;
+  const isHighConviction = impliedProb >= 70 || impliedProb <= 10;
   
   return (
     <div 
@@ -43,6 +54,7 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
           <div className="card-top-row">
             <div className="market-category">{market.category}</div>
             <div className="privacy-shield">
+              {isLive && <span className="live-badge">LIVE</span>}
               <span className="shield-icon">🛡</span>
               <span className="shield-text">Level 5</span>
             </div>
@@ -52,11 +64,11 @@ function MarketCard({ market, onClick }: { market: Market; onClick: () => void }
           <div className="market-odds">
             <div className="implied-prob">
               <span className="prob-label">Probability:</span>
-              <span className="prob-value">{market.impliedProbPercent}%</span>
+              <span className="prob-value">{impliedProb}%</span>
             </div>
             <div className="yes-no">
-              <span>Yes: {market.yesPrice.toFixed(2)}</span>
-              <span>No: {market.noPrice.toFixed(2)}</span>
+              <span>Yes: {yesPrice.toFixed(2)}</span>
+              <span>No: {noPrice.toFixed(2)}</span>
             </div>
           </div>
           <div className="market-footer">
@@ -77,6 +89,7 @@ export default function PredictionConsole() {
   const [sortBy, setSortBy] = useState("active");
   const [, setLocation] = useLocation();
   const [autonomousCount, setAutonomousCount] = useState(84219);
+  const [livePrices, setLivePrices] = useState<Record<string, LivePriceData>>({});
   const { authenticated, shortAddress, connect, disconnect } = useWallet();
 
   useEffect(() => {
@@ -93,6 +106,79 @@ export default function PredictionConsole() {
     return () => clearInterval(interval);
   }, []);
 
+  const fetchMarketPrice = useCallback(async (market: Market) => {
+    if (!market.polymarketSlug) return null;
+    
+    try {
+      const slugResponse = await fetch(`/api/polymarket/slug/${market.polymarketSlug}`);
+      if (!slugResponse.ok) return null;
+      
+      const slugData = await slugResponse.json();
+      if (!slugData.markets || slugData.markets.length === 0) return null;
+      
+      const favoriteOutcome = market.favoriteOutcome?.toLowerCase() || '';
+      const priceMatch = favoriteOutcome.match(/\$?([\d,]+)/);
+      const priceTarget = priceMatch ? priceMatch[1].replace(',', '') : null;
+      const keywords = favoriteOutcome.split(/[\s]+/).filter((w: string) => w.length > 2);
+      
+      const matchedMarket = slugData.markets.find((m: any) => {
+        const groupTitle = (m.groupItemTitle || '').toLowerCase().replace(',', '');
+        const question = (m.question || '').toLowerCase();
+        
+        if (priceTarget && groupTitle.includes(priceTarget)) {
+          return true;
+        }
+        
+        return keywords.some((keyword: string) => 
+          groupTitle.includes(keyword) || question.includes(keyword)
+        );
+      }) || slugData.markets[0];
+      
+      let outcomePrices = matchedMarket?.outcomePrices;
+      if (typeof outcomePrices === 'string') {
+        outcomePrices = JSON.parse(outcomePrices);
+      }
+      
+      if (outcomePrices && Array.isArray(outcomePrices) && outcomePrices.length >= 2) {
+        const yesPrice = parseFloat(outcomePrices[0]);
+        const noPrice = parseFloat(outcomePrices[1]);
+        return {
+          yesPrice,
+          noPrice,
+          impliedProbPercent: Math.round(yesPrice * 100),
+          isLive: true
+        };
+      }
+    } catch (err) {
+      console.error(`Failed to fetch price for ${market.id}:`, err);
+    }
+    return null;
+  }, []);
+
+  useEffect(() => {
+    const fetchAllPrices = async () => {
+      const pricePromises = markets.map(async (market) => {
+        const priceData = await fetchMarketPrice(market);
+        return { id: market.id, data: priceData };
+      });
+      
+      const results = await Promise.all(pricePromises);
+      const newPrices: Record<string, LivePriceData> = {};
+      
+      results.forEach(({ id, data }) => {
+        if (data) {
+          newPrices[id] = data;
+        }
+      });
+      
+      setLivePrices(newPrices);
+    };
+
+    fetchAllPrices();
+    const interval = setInterval(fetchAllPrices, 30000);
+    return () => clearInterval(interval);
+  }, [fetchMarketPrice]);
+
   const filteredMarkets = useMemo(() => {
     let result = activeCategory === "All" 
       ? [...markets] 
@@ -100,17 +186,25 @@ export default function PredictionConsole() {
     
     switch (sortBy) {
       case "active":
-        result.sort((a, b) => b.impliedProbPercent - a.impliedProbPercent);
+        result.sort((a, b) => {
+          const aProb = livePrices[a.id]?.impliedProbPercent ?? a.impliedProbPercent;
+          const bProb = livePrices[b.id]?.impliedProbPercent ?? b.impliedProbPercent;
+          return bProb - aProb;
+        });
         break;
       case "ending":
         result.sort((a, b) => a.id.localeCompare(b.id));
         break;
       case "edge":
-        result.sort((a, b) => (1 - b.yesPrice) - (1 - a.yesPrice));
+        result.sort((a, b) => {
+          const aYes = livePrices[a.id]?.yesPrice ?? a.yesPrice;
+          const bYes = livePrices[b.id]?.yesPrice ?? b.yesPrice;
+          return (1 - bYes) - (1 - aYes);
+        });
         break;
     }
     return result;
-  }, [activeCategory, sortBy]);
+  }, [activeCategory, sortBy, livePrices]);
 
   const handleMarketClick = (marketId: string) => {
     setLocation(`/markets/${marketId}`);
@@ -260,7 +354,8 @@ export default function PredictionConsole() {
         {filteredMarkets.map(market => (
           <MarketCard 
             key={market.id} 
-            market={market} 
+            market={market}
+            liveData={livePrices[market.id]}
             onClick={() => handleMarketClick(market.id)}
           />
         ))}

@@ -118,7 +118,8 @@ export const markets: Market[] = [
     yesPrice: 0.04,
     noPrice: 0.96,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/will-gta-6-cost-100"
+    sourceUrl: "https://polymarket.com/event/will-gta-6-cost-100",
+    polymarketSlug: "will-gta-6-cost-100"
   },
   {
     id: "elon-tweets-week",
@@ -129,7 +130,8 @@ export const markets: Market[] = [
     yesPrice: 0.19,
     noPrice: 0.81,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/all"
+    sourceUrl: "https://polymarket.com/event/elon-musk-of-tweets-december-5-december-12",
+    polymarketSlug: "elon-musk-of-tweets-december-5-december-12"
   },
   {
     id: "trump-tariffs-china",
@@ -140,7 +142,8 @@ export const markets: Market[] = [
     yesPrice: 0.15,
     noPrice: 0.85,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/trump-imposes-100-tariff-on-china-before-july"
+    sourceUrl: "https://polymarket.com/event/trump-imposes-100-tariff-on-china-before-july",
+    polymarketSlug: "trump-imposes-100-tariff-on-china-before-july"
   },
   {
     id: "us-recession-2025",
@@ -163,7 +166,8 @@ export const markets: Market[] = [
     yesPrice: 0.48,
     noPrice: 0.52,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/2028"
+    sourceUrl: "https://polymarket.com/event/will-ron-desantis-run-for-president-in-2028",
+    polymarketSlug: "will-ron-desantis-run-for-president-in-2028"
   },
   {
     id: "trump-pardon-jan6",
@@ -174,7 +178,8 @@ export const markets: Market[] = [
     yesPrice: 0.89,
     noPrice: 0.11,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/pardon"
+    sourceUrl: "https://polymarket.com/event/trump-pardons-jan-6-defendants",
+    polymarketSlug: "trump-pardons-jan-6-defendants"
   },
   {
     id: "sol-ath-2025",
@@ -209,7 +214,8 @@ export const markets: Market[] = [
     yesPrice: 0.85,
     noPrice: 0.15,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/nintendo"
+    sourceUrl: "https://polymarket.com/event/nintendo-switch-2-2025",
+    polymarketSlug: "nintendo-switch-2-2025"
   },
   {
     id: "oscars-best-picture",
@@ -220,7 +226,8 @@ export const markets: Market[] = [
     yesPrice: 0.42,
     noPrice: 0.58,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/oscars"
+    sourceUrl: "https://polymarket.com/event/oscars-best-picture",
+    polymarketSlug: "oscars-best-picture"
   },
   {
     id: "super-bowl-winner",
@@ -243,7 +250,8 @@ export const markets: Market[] = [
     yesPrice: 0.67,
     noPrice: 0.33,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/search/trump"
+    sourceUrl: "https://polymarket.com/event/will-trump-post-on-x-in-2025",
+    polymarketSlug: "will-trump-post-on-x-in-2025"
   }
 ];
 

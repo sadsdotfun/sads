@@ -471,6 +471,11 @@
   50% { box-shadow: 0 0 20px 0 rgba(179, 116, 255, 0.3); }
 }
 
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 .card-top-row {
   display: flex;
   justify-content: space-between;
@@ -495,6 +500,17 @@
   gap: 0.3rem;
   font-size: 0.55rem;
   color: #22c55e;
+}
+
+.live-badge {
+  background: #22c55e;
+  color: #000;
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  animation: pulse-live 1.5s infinite;
+  letter-spacing: 0.05em;
 }
 
 .shield-icon {
