@@ -3,17 +3,40 @@ import { useRoute, useLocation } from "wouter";
 import { markets } from "@/lib/markets";
 import "./trading-page.css";
 
-const generateChartData = () => {
-  const data = [];
-  let value = 0.45 + Math.random() * 0.2;
-  for (let i = 30; i >= 0; i--) {
+interface CandleData {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+const generateCandleData = (days: number, baseValue: number): CandleData[] => {
+  const data: CandleData[] = [];
+  let value = baseValue;
+  
+  for (let i = days; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    value = Math.max(0.1, Math.min(0.95, value + (Math.random() - 0.5) * 0.08));
+    
+    const volatility = 0.05;
+    const change = (Math.random() - 0.5) * volatility;
+    const open = value;
+    const close = Math.max(0.01, Math.min(0.99, value + change));
+    const high = Math.max(open, close) + Math.random() * volatility * 0.5;
+    const low = Math.min(open, close) - Math.random() * volatility * 0.5;
+    
     data.push({
       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      value: value
+      open: Math.max(0.01, Math.min(0.99, open)),
+      high: Math.max(0.01, Math.min(0.99, high)),
+      low: Math.max(0.01, Math.min(0.99, low)),
+      close: Math.max(0.01, Math.min(0.99, close)),
+      volume: Math.floor(Math.random() * 100000) + 10000
     });
+    
+    value = close;
   }
   return data;
 };
@@ -24,9 +47,14 @@ export default function TradingPage() {
   const [selectedSide, setSelectedSide] = useState<"yes" | "no">("yes");
   const [amount, setAmount] = useState("");
   const [timeframe, setTimeframe] = useState("30d");
+  const [hoveredCandle, setHoveredCandle] = useState<CandleData | null>(null);
 
   const market = markets.find(m => m.id === params?.id);
-  const chartData = useMemo(() => generateChartData(), []);
+
+  const chartData = useMemo(() => {
+    const days = timeframe === "24h" ? 24 : timeframe === "7d" ? 7 : timeframe === "30d" ? 30 : 90;
+    return generateCandleData(days, market?.yesPrice || 0.5);
+  }, [timeframe, market?.yesPrice]);
 
   if (!market) {
     return (
@@ -40,8 +68,10 @@ export default function TradingPage() {
   }
 
   const currentPrice = selectedSide === "yes" ? market.yesPrice : market.noPrice;
-  const shares = amount ? parseFloat(amount) / currentPrice : 0;
-  const maxPayout = shares * 1.0;
+  const amountNum = parseFloat(amount) || 0;
+  const shares = amountNum > 0 ? amountNum / currentPrice : 0;
+  const maxPayout = shares > 0 ? shares * 1.0 : 0;
+  const potentialProfit = maxPayout - amountNum;
   const impliedEdge = ((1 - currentPrice) * 100).toFixed(1);
 
   const handleQuickAmount = (value: number) => {
@@ -50,6 +80,10 @@ export default function TradingPage() {
       return (current + value).toString();
     });
   };
+
+  const minPrice = Math.min(...chartData.map(d => d.low)) * 0.95;
+  const maxPrice = Math.max(...chartData.map(d => d.high)) * 1.05;
+  const priceRange = maxPrice - minPrice;
 
   return (
     <div className="trading-page" data-testid="trading-page">
@@ -73,34 +107,80 @@ export default function TradingPage() {
           </div>
 
           <div className="chart-card">
-            <div className="chart-tabs">
-              {["24h", "7d", "30d", "All"].map(tf => (
-                <button
-                  key={tf}
-                  className={`chart-tab ${timeframe === tf ? 'active' : ''}`}
-                  onClick={() => setTimeframe(tf)}
-                  data-testid={`button-timeframe-${tf.toLowerCase()}`}
-                >
-                  {tf}
-                </button>
-              ))}
-            </div>
-            <div className="chart-area">
-              <div className="simple-chart">
-                {chartData.map((point, i) => (
-                  <div
-                    key={i}
-                    className="chart-bar"
-                    style={{ height: `${point.value * 100}%` }}
-                    title={`${point.date}: ${(point.value * 100).toFixed(0)}%`}
-                  />
+            <div className="chart-header-row">
+              <div className="chart-tabs">
+                {["24h", "7d", "30d", "All"].map(tf => (
+                  <button
+                    key={tf}
+                    className={`chart-tab ${timeframe === tf ? 'active' : ''}`}
+                    onClick={() => setTimeframe(tf)}
+                    data-testid={`button-timeframe-${tf.toLowerCase()}`}
+                  >
+                    {tf}
+                  </button>
                 ))}
               </div>
-              <div className="chart-labels">
-                <span>{chartData[0]?.date}</span>
-                <span>{chartData[chartData.length - 1]?.date}</span>
+              {hoveredCandle && (
+                <div className="chart-tooltip-inline">
+                  <span>{hoveredCandle.date}</span>
+                  <span className="tooltip-o">O: {(hoveredCandle.open * 100).toFixed(1)}%</span>
+                  <span className="tooltip-h">H: {(hoveredCandle.high * 100).toFixed(1)}%</span>
+                  <span className="tooltip-l">L: {(hoveredCandle.low * 100).toFixed(1)}%</span>
+                  <span className={`tooltip-c ${hoveredCandle.close >= hoveredCandle.open ? 'green' : 'red'}`}>
+                    C: {(hoveredCandle.close * 100).toFixed(1)}%
+                  </span>
+                </div>
+              )}
+            </div>
+            
+            <div className="tradingview-chart">
+              <div className="chart-y-axis">
+                <span>{(maxPrice * 100).toFixed(0)}%</span>
+                <span>{((maxPrice + minPrice) / 2 * 100).toFixed(0)}%</span>
+                <span>{(minPrice * 100).toFixed(0)}%</span>
+              </div>
+              <div className="candle-container">
+                {chartData.map((candle, i) => {
+                  const isGreen = candle.close >= candle.open;
+                  const bodyTop = ((maxPrice - Math.max(candle.open, candle.close)) / priceRange) * 100;
+                  const bodyHeight = (Math.abs(candle.close - candle.open) / priceRange) * 100;
+                  const wickTop = ((maxPrice - candle.high) / priceRange) * 100;
+                  const wickBottom = ((maxPrice - candle.low) / priceRange) * 100;
+                  
+                  return (
+                    <div
+                      key={i}
+                      className="candle"
+                      onMouseEnter={() => setHoveredCandle(candle)}
+                      onMouseLeave={() => setHoveredCandle(null)}
+                    >
+                      <div
+                        className="candle-wick"
+                        style={{
+                          top: `${wickTop}%`,
+                          height: `${wickBottom - wickTop}%`,
+                          backgroundColor: isGreen ? '#22c55e' : '#ef4444'
+                        }}
+                      />
+                      <div
+                        className={`candle-body ${isGreen ? 'green' : 'red'}`}
+                        style={{
+                          top: `${bodyTop}%`,
+                          height: `${Math.max(bodyHeight, 1)}%`
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
+            
+            <div className="chart-x-axis">
+              <span>{chartData[0]?.date}</span>
+              <span>{chartData[Math.floor(chartData.length / 2)]?.date}</span>
+              <span>{chartData[chartData.length - 1]?.date}</span>
+            </div>
+            
             <p className="chart-caption">Data sourced from on-chain orderflow, updated in real time.</p>
           </div>
 
@@ -168,8 +248,12 @@ export default function TradingPage() {
                 <span>{shares.toFixed(2)}</span>
               </div>
               <div className="calc-row">
-                <span>Max payout:</span>
+                <span>Total return if win:</span>
                 <span>{maxPayout.toFixed(2)} USDC</span>
+              </div>
+              <div className="calc-row profit">
+                <span>Max payout (profit):</span>
+                <span className="profit-value">+{potentialProfit.toFixed(2)} USDC</span>
               </div>
               <div className="calc-row highlight">
                 <span>Implied edge:</span>
