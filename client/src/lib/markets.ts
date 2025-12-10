@@ -46,8 +46,8 @@ export const markets: Market[] = [
     yesPrice: 0.37,
     noPrice: 0.63,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/2028-democratic-presidential-nomination",
-    polymarketSlug: "2028-democratic-presidential-nomination"
+    sourceUrl: "https://polymarket.com/event/democratic-presidential-nominee-2028",
+    polymarketSlug: "democratic-presidential-nominee-2028"
   },
   {
     id: "time-poy-2025",
@@ -89,7 +89,7 @@ export const markets: Market[] = [
     id: "eth-5000-2025",
     category: "Crypto",
     title: "What price will Ethereum hit in 2025?",
-    favoriteOutcome: "Hits $5,000",
+    favoriteOutcome: "$5,000",
     impliedProbPercent: 3,
     yesPrice: 0.03,
     noPrice: 0.97,
@@ -233,10 +233,10 @@ export const markets: Market[] = [
     id: "super-bowl-winner",
     category: "Culture",
     title: "Super Bowl LX Champion 2026",
-    favoriteOutcome: "Detroit Lions",
-    impliedProbPercent: 28,
-    yesPrice: 0.28,
-    noPrice: 0.72,
+    favoriteOutcome: "Los Angeles R",
+    impliedProbPercent: 17,
+    yesPrice: 0.17,
+    noPrice: 0.83,
     source: "Polymarket",
     sourceUrl: "https://polymarket.com/event/super-bowl-champion-2026-731",
     polymarketSlug: "super-bowl-champion-2026-731"
@@ -244,14 +244,14 @@ export const markets: Market[] = [
   {
     id: "trump-meet-maduro",
     category: "Politics",
-    title: "Will Trump talk to Maduro by Dec 31?",
-    favoriteOutcome: "No",
-    impliedProbPercent: 40,
-    yesPrice: 0.40,
-    noPrice: 0.60,
+    title: "Will Trump talk to Maduro again by Dec 31?",
+    favoriteOutcome: "Yes",
+    impliedProbPercent: 52,
+    yesPrice: 0.52,
+    noPrice: 0.48,
     source: "Polymarket",
-    sourceUrl: "https://polymarket.com/event/trump-talk-to-maduro-by-december-31",
-    polymarketSlug: "trump-talk-to-maduro-by-december-31"
+    sourceUrl: "https://polymarket.com/event/will-trump-talk-to-nicols-maduro-again-by-december-31",
+    polymarketSlug: "will-trump-talk-to-nicols-maduro-again-by-december-31"
   }
 ];
 
