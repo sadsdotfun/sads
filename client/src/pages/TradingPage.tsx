@@ -21,12 +21,18 @@ const generatePredictionData = (baseValue: number, days: number): CandleData[] =
     const date = new Date();
     date.setDate(date.getDate() - i);
     
+    const isLastDay = i === 0;
     const volatility = 0.03;
     const trend = (baseValue - value) * 0.02;
     const change = trend + (Math.random() - 0.5) * volatility;
     
     const open = value;
-    const close = Math.max(0.01, Math.min(0.99, value + change));
+    let close = Math.max(0.01, Math.min(0.99, value + change));
+    
+    if (isLastDay) {
+      close = baseValue;
+    }
+    
     const high = Math.max(open, close) + Math.random() * volatility * 0.5;
     const low = Math.min(open, close) - Math.random() * volatility * 0.5;
     

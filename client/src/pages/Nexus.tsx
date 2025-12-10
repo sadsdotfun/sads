@@ -787,7 +787,7 @@ export default function Nexus() {
 
 
       <div className="coordinates">
-        <p>Nexus State • Active</p>
+        <p>SADS State • Active</p>
         <p>where consciousness flows</p>
       </div>
     </section>
