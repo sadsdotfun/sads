@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { markets, categories, sortOptions, Market } from "@/lib/markets";
 import { useWallet } from "@/hooks/useWallet";
-import { toast } from "sonner";
+import { SettledMarketModal } from "@/components/SettledMarketModal";
 import "./prediction-console.css";
 
 interface LivePriceData {
@@ -12,7 +12,7 @@ interface LivePriceData {
   isLive: boolean;
 }
 
-function MarketCard({ market, liveData, onClick }: { market: Market; liveData?: LivePriceData; onClick: () => void }) {
+function MarketCard({ market, liveData, onClick, onSettledClick }: { market: Market; liveData?: LivePriceData; onClick: () => void; onSettledClick: () => void }) {
   const yesPrice = liveData?.yesPrice ?? market.yesPrice;
   const noPrice = liveData?.noPrice ?? market.noPrice;
   const impliedProb = liveData?.impliedProbPercent ?? market.impliedProbPercent;
@@ -22,10 +22,7 @@ function MarketCard({ market, liveData, onClick }: { market: Market; liveData?: 
 
   const handleClick = () => {
     if (isSettled) {
-      toast("Prediction already settled.", {
-        position: "bottom-right",
-        duration: 3000,
-      });
+      onSettledClick();
       return;
     }
     onClick();
@@ -103,6 +100,7 @@ export default function PredictionConsole() {
   const [, setLocation] = useLocation();
   const [autonomousCount, setAutonomousCount] = useState(84219);
   const [livePrices, setLivePrices] = useState<Record<string, LivePriceData>>({});
+  const [showSettledModal, setShowSettledModal] = useState(false);
   const { authenticated, shortAddress, connect, disconnect } = useWallet();
 
   useEffect(() => {
@@ -370,6 +368,7 @@ export default function PredictionConsole() {
             market={market}
             liveData={livePrices[market.id]}
             onClick={() => handleMarketClick(market.id)}
+            onSettledClick={() => setShowSettledModal(true)}
           />
         ))}
       </div>
@@ -380,6 +379,11 @@ export default function PredictionConsole() {
         </p>
       </footer>
       </div>
+
+      <SettledMarketModal 
+        isOpen={showSettledModal} 
+        onClose={() => setShowSettledModal(false)} 
+      />
     </div>
   );
 }
