@@ -209,14 +209,15 @@
 
 .markets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 3rem 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  align-items: start;
 }
 
 .card-container {
   position: relative;
   width: 100%;
-  height: 320px;
+  height: 380px;
   transition: 200ms;
 }
 
@@ -395,18 +396,27 @@
 }
 
 .market-title {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
   line-height: 1.3;
   color: #fff;
+  min-height: 2.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .market-favorite {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #b374ff;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   font-weight: 500;
+  min-height: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .market-odds {
