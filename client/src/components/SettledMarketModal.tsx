@@ -11,12 +11,10 @@ export function SettledMarketModal({ isOpen, onClose }: SettledMarketModalProps)
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 4000);
+      const timer = setTimeout(onClose, 2000);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
