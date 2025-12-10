@@ -80,6 +80,13 @@ export default function PredictionConsole() {
   const { authenticated, shortAddress, connect, disconnect } = useWallet();
 
   useEffect(() => {
+    const hasLoadedTerminal = sessionStorage.getItem('sads_terminal_loaded');
+    if (!hasLoadedTerminal) {
+      setLocation('/terminal');
+    }
+  }, [setLocation]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setAutonomousCount(prev => prev + Math.floor(Math.random() * 5));
     }, 3000);

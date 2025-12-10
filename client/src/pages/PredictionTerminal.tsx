@@ -16,6 +16,7 @@ export default function PredictionTerminal() {
         const next = prev + increment;
         if (next >= 100) {
           clearInterval(timer);
+          sessionStorage.setItem('sads_terminal_loaded', 'true');
           setTimeout(() => {
             setLocation("/app");
           }, 300);
