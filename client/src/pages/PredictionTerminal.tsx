@@ -106,14 +106,19 @@ export default function PredictionTerminal() {
       
       <div className="pending-content">
         <div className="pending-wrapper">
-          <img src="/logo.png" alt="SADS Logo" style={{ width: '50px', height: 'auto', marginBottom: '1rem' }} />
-          
-          <div className="loading-container">
-            <div className="loading-label">Initializing SADS Protocol</div>
-            <div className="loading-bar-wrapper">
-              <div className="loading-bar" style={{ width: `${progress}%` }}></div>
+          <div className="gameboy-loader">
+            <div className="gameboy-box">
+              <div className="top-side"></div>
+              <div className="bottom-side"></div>
+              <div className="gameboy-screen">
+                <div className="lightray-limit">
+                  <div className="lightray"></div>
+                </div>
+                <div className="terminal-loader-box">
+                  <div className="terminal-progress" style={{ width: `${progress}%` }}></div>
+                </div>
+              </div>
             </div>
-            <div className="loading-percent">{Math.floor(progress)}%</div>
           </div>
         </div>
       </div>

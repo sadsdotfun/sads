@@ -443,104 +443,55 @@ body::after {
   z-index: 1000;
 }
 
-.gameboy-loader {
+.loader-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 180px;
+  height: 180px;
+  font-family: var(--font-primary);
+  font-size: 1.2em;
+  font-weight: 300;
+  color: white;
+  border-radius: 50%;
+  background-color: transparent;
+  user-select: none;
 }
 
-.gameboy-box {
-  background-color: rgb(84, 84, 84);
-  width: 220px;
-  height: 220px;
-  padding: 20px;
-  border-radius: 20px;
-  border: 5px solid #b374ff;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 3px 4px 5px rgba(179, 116, 255, 0.3);
-}
-
-.gameboy-box .gameboy-screen {
+.loader {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: black;
-  width: calc(100% - 40px);
-  height: calc(100% - 40px);
-  border-radius: 10px;
-  padding: 10px;
-  overflow: hidden;
-}
-
-.gameboy-screen .lightray-limit {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.gameboy-screen .lightray {
-  position: absolute;
-  left: 0;
   top: 0;
-  transform: translate(-50%, -50%);
-  width: 250%;
-  height: 250%;
-  background-image: radial-gradient(rgba(179, 116, 255, 0.4), transparent, transparent);
-  border-radius: 10px 10px 0 0;
-}
-
-.gameboy-screen .loader-box {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  padding: 5px;
-  border: 3px solid #b374ff;
-}
-
-.gameboy-screen .loader-box .progress {
-  width: 0;
-  height: 8px;
-  background-color: #b374ff;
-  animation: progress 2.5s forwards;
-}
-
-.top-side {
-  position: absolute;
+  left: 0;
   width: 100%;
-  height: 100%;
-  top: -55px;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: 10px 10px 10px rgba(179, 116, 255, 0.2);
-  background-color: rgba(179, 116, 255, 0.1);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: transparent;
+  animation: loader-rotate 2s linear infinite;
+  z-index: 0;
 }
 
-.bottom-side {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: calc(100% + 60px);
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: -10px -10px 10px rgba(179, 116, 255, 0.3);
-  background-color: rgba(179, 116, 255, 0.15);
-}
-
-@keyframes progress {
-  from {
-    width: 0;
+@keyframes loader-rotate {
+  0% {
+    transform: rotate(90deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 30px 0 #ccaaff inset,
+      0 60px 60px 0 #aa77ff inset;
   }
-  to {
-    width: 100%;
+  50% {
+    transform: rotate(270deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 10px 0 #b374ff inset,
+      0 40px 60px 0 #5a3d8a inset;
+  }
+  100% {
+    transform: rotate(450deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 30px 0 #ccaaff inset,
+      0 60px 60px 0 #aa77ff inset;
   }
 }
 
